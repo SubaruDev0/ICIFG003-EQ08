@@ -1,0 +1,13 @@
+Comando para crear la base de datos:
+createdb -U postgres remedio
+Comandos github:
+crear repositorio local: git init 
+agregar archivos en forma local: git add .
+agregar archivos al staging área git commit -m "commit descriptivo"
+git checkout -b main (o el nombre de la rama que sea)
+git remote add origin https://github.com/SubaruDev0/solemne1.git
+git push -u origin main
+
+
+si ya existe se clona con:
+git clone https://github.com/SubaruDev0/solemne1.git
