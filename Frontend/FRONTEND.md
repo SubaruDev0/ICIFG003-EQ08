@@ -21,7 +21,7 @@ Migración completa del frontend original (HTML + CSS + JS puro) a **Angular 17*
 ## Instalación y ejecución
 
 ```bash
-cd clinica-dental
+cd Frontend
 npm install        # instala todas las dependencias
 ng serve           # levanta en http://localhost:4200
 ```
