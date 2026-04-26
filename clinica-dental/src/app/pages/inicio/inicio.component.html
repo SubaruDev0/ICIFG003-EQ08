@@ -1,0 +1,86 @@
+<app-header></app-header>
+
+<!-- BANNER -->
+<section class="banner">
+  <img src="assets/img/banner.png" alt="Banner principal">
+  <div class="banner-text">
+    <h1>Bienvenidos a nuestra Clínica Dental</h1>
+    <p>Los mejores tratamientos para tu salud bucal</p>
+    <button class="btn-banner" (click)="irAPedirTurno()">Solicitar Cita</button>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <h2 class="section-title">Nuestros Servicios</h2>
+  <div class="carousel-wrapper">
+    <button class="carousel-btn left-btn" (click)="scrollLeft()">&#10094;</button>
+    <div class="carousel" #carousel
+         (mouseenter)="onCarouselEnter()"
+         (mouseleave)="onCarouselLeave()">
+      <div class="servicio">
+        <img src="assets/img/images.jpg" alt="Odontología General">
+        <h3>Odontología General</h3>
+        <p>Atención integral para el cuidado de tu salud bucal.</p>
+      </div>
+      <div class="servicio">
+        <img src="assets/img/Ortodoncia.jpg" alt="Ortodoncia">
+        <h3>Ortodoncia</h3>
+        <p>Alinea tus dientes y mejora tu sonrisa.</p>
+      </div>
+      <div class="servicio">
+        <img src="assets/img/Implantes.jpg" alt="Implantes Dentales">
+        <h3>Implantes Dentales</h3>
+        <p>Solución permanente para reemplazar dientes perdidos.</p>
+      </div>
+      <div class="servicio">
+        <img src="assets/img/Endodoncia.png" alt="Endodoncia">
+        <h3>Endodoncia</h3>
+        <p>Tratamiento de conductos para salvar tus piezas dentales.</p>
+      </div>
+      <div class="servicio">
+        <img src="assets/img/Periodoncia.jpg" alt="Periodoncia">
+        <h3>Periodoncia</h3>
+        <p>Cuidado y tratamiento especializado de encías.</p>
+      </div>
+      <div class="servicio">
+        <img src="assets/img/protesis.jpg" alt="Rehabilitación Oral">
+        <h3>Rehabilitación Oral</h3>
+        <p>Recupera la función y estética de tu sonrisa.</p>
+      </div>
+    </div>
+    <button class="carousel-btn right-btn" (click)="scrollRight()">&#10095;</button>
+  </div>
+  <div class="ver-mas-container">
+    <button class="btn-ver-mas" (click)="irAServicios()">Ver Todos los Servicios</button>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios">
+  <h2>Lo que dicen nuestros pacientes</h2>
+  <div class="testimonios-grid">
+    <div class="testimonio">
+      <p>"Excelente atención y resultados. Muy recomendados."</p>
+      <p>- Juan Pérez</p>
+      <p>⭐⭐⭐⭐⭐</p>
+      <p>Servicio: Ortodoncia</p>
+    </div>
+    <div class="testimonio">
+      <p>"Profesionales y amables. Me hicieron sentir muy cómoda."</p>
+      <p>- Rosa López</p>
+      <p>⭐⭐⭐⭐</p>
+      <p>Servicio: Blanqueamiento</p>
+    </div>
+    <div class="testimonio">
+      <p>"El tratamiento de implantes fue impecable."</p>
+      <p>- Luis Fernández</p>
+      <p>⭐⭐⭐⭐⭐</p>
+      <p>Servicio: Implantes Dentales</p>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>
+
+<button id="btn-top" *ngIf="mostrarBtnTop" (click)="volverArriba()">Volver Arriba</button>

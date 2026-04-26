@@ -1,0 +1,164 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--fondo-claro);
+}
+
+.container {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, var(--azul-principal) 0%, var(--azul-claro) 100%);
+  border-radius: 16px;
+  color: white;
+}
+
+.page-header h1 { font-size: 2.5rem; margin-bottom: 15px; }
+.page-header p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+.form-section {
+  background: var(--fondo-tarjeta);
+  border-radius: 16px;
+  padding: 40px;
+  margin-bottom: 40px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.formulario { max-width: 800px; margin: 0 auto; }
+
+.turno-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.form-group { display: flex; flex-direction: column; }
+.form-group.full-width { grid-column: 1 / -1; }
+
+.form-group label { margin-bottom: 8px; font-weight: 600; color: var(--azul-principal); font-size: 1rem; }
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--azul-principal);
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(15,164,156,0.1);
+}
+
+.form-group textarea { resize: vertical; min-height: 100px; font-family: inherit; }
+
+.help-text { margin-top: 5px; font-size: 0.85rem; color: #666; font-style: italic; }
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.checkbox-label input[type="checkbox"] { display: none; }
+
+.checkmark {
+  width: 20px; height: 20px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+  margin-top: 2px;
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+  background-color: var(--azul-principal);
+  border-color: var(--azul-principal);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+  content: "✓";
+  position: absolute;
+  color: white;
+  font-size: 14px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.checkbox-label .link { color: var(--azul-principal); text-decoration: none; font-weight: 600; }
+.checkbox-label .link:hover { text-decoration: underline; }
+
+.btn-submit {
+  grid-column: 1 / -1;
+  background-color: var(--color-secundario);
+  color: var(--color-fuente);
+  border: none;
+  border-radius: 50px;
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-submit:hover { background-color: #e5b600; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+.info-section { margin-top: 40px; }
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.info-card {
+  background: var(--fondo-tarjeta);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  border-left: 4px solid var(--azul-principal);
+  transition: transform 0.3s ease;
+}
+
+.info-card:hover { transform: translateY(-5px); }
+.info-card h3 { color: var(--azul-principal); margin-bottom: 15px; font-size: 1.3rem; }
+.info-card p { margin-bottom: 8px; color: var(--color-fuente); line-height: 1.5; }
+.info-card strong { color: var(--azul-claro); }
+
+@media (max-width: 768px) {
+  .container { padding: 15px; }
+  .page-header { padding: 20px 15px; margin-bottom: 30px; }
+  .page-header h1 { font-size: 2rem; }
+  .form-section { padding: 25px 20px; margin-bottom: 30px; }
+  .turno-form { grid-template-columns: 1fr; gap: 20px; }
+  .form-group.full-width { grid-column: 1; }
+  .btn-submit { grid-column: 1; }
+  .info-grid { grid-template-columns: 1fr; gap: 20px; }
+  .info-card { padding: 20px; }
+}
+
+@media (max-width: 480px) {
+  .page-header h1 { font-size: 1.8rem; }
+  .form-section { padding: 20px 15px; }
+  .info-card { padding: 15px; }
+}

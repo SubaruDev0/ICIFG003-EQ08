@@ -1,0 +1,23 @@
+/* Variables y reset global del diseño de la Clínica Dental */
+:root {
+  --azul-principal: #0fa49c;
+  --azul-claro: #087872;
+  --color-secundario: #ffca1c;
+  --fondo-claro: #f0f9f8;
+  --fondo-tarjeta: #ffffff;
+  --color-fuente: #333333;
+  --color-hover: #0d8c85;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background-color: var(--fondo-claro);
+  color: var(--color-fuente);
+  min-height: 100vh;
+}

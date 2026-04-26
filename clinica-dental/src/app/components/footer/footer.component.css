@@ -1,0 +1,25 @@
+footer {
+  background: var(--azul-principal);
+  color: white;
+  text-align: center;
+  padding: 25px 20px;
+  margin-top: auto;
+}
+
+footer .redes-sociales {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+
+footer .redes-sociales a {
+  text-decoration: none;
+  color: #f5f7fa;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+footer .redes-sociales a:hover {
+  color: var(--color-secundario);
+}

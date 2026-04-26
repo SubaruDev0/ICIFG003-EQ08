@@ -1,0 +1,66 @@
+<app-header></app-header>
+
+<main class="container">
+  <h2 class="mapa-titulo">Sede Principal: Concepción</h2>
+
+  <section id="mapa-ubicacion" class="section">
+    <div id="mapa-interactivo-div">
+      <iframe
+        width="100%" height="100%"
+        frameborder="0"
+        style="border:0"
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://maps.google.com/maps?q=Arturo%20Prat%20450,%20Concepci%C3%B3n&t=&z=15&ie=UTF8&iwloc=&output=embed"
+        allowfullscreen loading="lazy">
+      </iframe>
+    </div>
+
+    <div class="carrusel-sedes-wrapper">
+      <h3><i class="fas fa-city"></i> Nuestras Otras Sucursales</h3>
+      <div class="carrusel-sedes">
+        <div class="sede-card" *ngFor="let sede of sedes">
+          <div class="sede-card-img-container">
+            <img [src]="sede.image" [alt]="'Sede ' + sede.name" class="sede-card-img">
+          </div>
+          <h4>{{ sede.name }}</h4>
+          <p><i class="fas fa-phone-alt"></i> {{ sede.phone }}</p>
+          <p style="padding-bottom: 15px;"><i class="fas fa-map-marker-alt"></i> {{ shortAddress(sede.address) }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="info-cards">
+    <article class="tarjeta horario-info">
+      <h3><i class="fas fa-clock"></i> Horario de Atención</h3>
+      <p>Lunes – Viernes:</p>
+      <p class="time-slot">09:00 — 17:30</p>
+      <p style="margin-top: 15px;">Sábados no festivos:</p>
+      <p class="time-slot" style="font-size: 1.4em;">09:00 — 14:00</p>
+      <p style="margin-top: 15px; font-size: 0.9em; color: #888;">Atención solo con cita previa. Domingos y festivos cerrado.</p>
+    </article>
+
+    <article class="tarjeta contacto-info">
+      <h3><i class="fas fa-id-badge"></i> Contacto Central</h3>
+      <div class="var-item">
+        <span>Teléfono Central</span>
+        <a href="tel:+56912345678" class="var-value">+56 9 1234 5678 <i class="fas fa-phone-alt"></i></a>
+      </div>
+      <div class="var-item">
+        <span>Correo Electrónico</span>
+        <a href="mailto:contacto@centrodental.cl" class="var-value">contacto&#64;centrodental.cl <i class="fas fa-envelope"></i></a>
+      </div>
+      <div class="var-item redes-var">
+        <span class="redes-titulo">Aprende más de nosotros en:</span>
+        <span class="var-value">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </span>
+      </div>
+    </article>
+  </section>
+</main>
+
+<app-footer></app-footer>
+
+<button class="btn-pedir-turno" (click)="irAPedirTurno()">Pedir Turno</button>

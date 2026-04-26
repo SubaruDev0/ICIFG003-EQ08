@@ -1,0 +1,117 @@
+<app-header></app-header>
+
+<main class="container">
+  <div class="page-header">
+    <h1>Solicitar Turno</h1>
+    <p>Complete el formulario para agendar su cita. Nos contactaremos para confirmar.</p>
+  </div>
+
+  <section id="turnos" class="form-section">
+    <div class="formulario">
+      <form class="turno-form" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+          <label for="nombre">Nombre Completo *</label>
+          <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre"
+                 placeholder="Ingrese su nombre completo" required>
+        </div>
+
+        <div class="form-group">
+          <label for="rut">RUT *</label>
+          <input type="text" id="rut" [(ngModel)]="rut" name="rut"
+                 placeholder="Ej: 12.345.678-9" (input)="formatearRut()" required>
+          <small class="help-text">Formato: 12.345.678-9</small>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Teléfono *</label>
+          <input type="tel" id="telefono" [(ngModel)]="telefono" name="telefono"
+                 placeholder="+56 9 1234 5678" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" [(ngModel)]="email" name="email"
+                 placeholder="su.email@ejemplo.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="servicio">Servicio Solicitado *</label>
+          <select id="servicio" [(ngModel)]="servicio" name="servicio" required>
+            <option value="" disabled selected>Seleccione un servicio</option>
+            <option value="odontologia-general">Odontología general</option>
+            <option value="ortodoncia">Ortodoncia</option>
+            <option value="implantes">Implantes dentales</option>
+            <option value="endodoncia">Endodoncia (tratamiento de conducto)</option>
+            <option value="periodoncia">Periodoncia (encías)</option>
+            <option value="rehabilitacion">Rehabilitación oral</option>
+            <option value="estetica">Estética dental (blanqueamiento, carillas)</option>
+            <option value="protesis">Prótesis dentales</option>
+            <option value="cirugia">Cirugía oral y maxilofacial</option>
+            <option value="odontopediatria">Odontopediatría (niños)</option>
+            <option value="urgencias">Urgencias dentales</option>
+            <option value="limpieza">Limpieza dental</option>
+            <option value="radiografias">Radiografías y diagnóstico</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fecha">Fecha Preferida *</label>
+          <input type="date" id="fecha" [(ngModel)]="fecha" name="fecha"
+                 [min]="fechaMin" required>
+        </div>
+
+        <div class="form-group">
+          <label for="horario">Horario Preferido *</label>
+          <select id="horario" [(ngModel)]="horario" name="horario" required>
+            <option value="" disabled selected>Seleccione un horario</option>
+            <option value="mañana">Mañana (9:00 - 12:00)</option>
+            <option value="tarde">Tarde (15:00 - 19:00)</option>
+            <option value="sabado">Sábado (9:00 - 13:00)</option>
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="mensaje">Mensaje Adicional</label>
+          <textarea id="mensaje" [(ngModel)]="mensaje" name="mensaje"
+                    placeholder="Describa brevemente el motivo de su consulta..." rows="4"></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="terminos" name="terminos" required>
+            <span class="checkmark"></span>
+            Acepto los <a href="#" class="link">términos y condiciones</a> y la política de privacidad *
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit">Solicitar Turno</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="info-section">
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>📞 Contacto Rápido</h3>
+        <p>Si prefiere, puede contactarnos directamente:</p>
+        <p><strong>Teléfono:</strong> +56 9 1234 5678</p>
+        <p><strong>Email:</strong> turnos&#64;clinicadental.cl</p>
+      </div>
+      <div class="info-card">
+        <h3>🕒 Horarios de Atención</h3>
+        <p><strong>Lunes a Viernes:</strong> 9:00 - 20:00 hrs</p>
+        <p><strong>Sábados:</strong> 9:00 - 14:00 hrs</p>
+        <p><strong>Domingos:</strong> Cerrado</p>
+      </div>
+      <div class="info-card">
+        <h3>🚑 Urgencias Dentales</h3>
+        <p>Para emergencias fuera de horario:</p>
+        <p><strong>Urgencias:</strong> +56 9 8765 4321</p>
+        <p>Atendemos emergencias las 24 horas</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>
