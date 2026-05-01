@@ -6,6 +6,16 @@
     <p>Complete el formulario para agendar su cita. Nos contactaremos para confirmar.</p>
   </div>
 
+  <!-- Mensaje de éxito -->
+  <div *ngIf="exito" class="alert-success">
+    ✅ Turno solicitado correctamente. Nos contactaremos para confirmar.
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorEnvio" class="alert-error">
+    ⚠️ {{ errorEnvio }}
+  </div>
+
   <section id="turnos" class="form-section">
     <div class="formulario">
       <form class="turno-form" (ngSubmit)="onSubmit()">
@@ -37,22 +47,13 @@
 
         <div class="form-group">
           <label for="servicio">Servicio Solicitado *</label>
-          <select id="servicio" [(ngModel)]="servicio" name="servicio" required>
-            <option value="" disabled selected>Seleccione un servicio</option>
-            <option value="odontologia-general">Odontología general</option>
-            <option value="ortodoncia">Ortodoncia</option>
-            <option value="implantes">Implantes dentales</option>
-            <option value="endodoncia">Endodoncia (tratamiento de conducto)</option>
-            <option value="periodoncia">Periodoncia (encías)</option>
-            <option value="rehabilitacion">Rehabilitación oral</option>
-            <option value="estetica">Estética dental (blanqueamiento, carillas)</option>
-            <option value="protesis">Prótesis dentales</option>
-            <option value="cirugia">Cirugía oral y maxilofacial</option>
-            <option value="odontopediatria">Odontopediatría (niños)</option>
-            <option value="urgencias">Urgencias dentales</option>
-            <option value="limpieza">Limpieza dental</option>
-            <option value="radiografias">Radiografías y diagnóstico</option>
+          <select id="servicio" [(ngModel)]="servicioSeleccionado" name="servicio" required>
+            <option [ngValue]="null" disabled selected>Seleccione un servicio</option>
+            <option *ngFor="let s of servicios" [ngValue]="s">{{ s.nombre }}</option>
           </select>
+          <small *ngIf="servicios.length === 0" class="help-text">
+            No hay servicios disponibles en este momento.
+          </small>
         </div>
 
         <div class="form-group">
@@ -85,7 +86,9 @@
           </label>
         </div>
 
-        <button type="submit" class="btn-submit">Solicitar Turno</button>
+        <button type="submit" class="btn-submit" [disabled]="enviando">
+          {{ enviando ? 'Enviando...' : 'Solicitar Turno' }}
+        </button>
       </form>
     </div>
   </section>

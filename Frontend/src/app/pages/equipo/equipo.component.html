@@ -6,10 +6,39 @@
 </div>
 
 <main>
-  <!-- Especialistas -->
+  <!-- Profesionales desde el backend -->
   <section id="especialistas" class="equipo-section">
     <h2>Especialistas</h2>
-    <div class="equipo-grid">
+
+    <div *ngIf="cargando" class="loading-msg">
+      <p>Cargando equipo...</p>
+    </div>
+
+    <div *ngIf="errorCarga" class="error-msg">
+      <p>No se pudo cargar el equipo desde el servidor.</p>
+    </div>
+
+    <!-- Lista dinámica del backend -->
+    <div *ngIf="!cargando && profesionales.length > 0" class="equipo-grid">
+      <div class="miembro-equipo" *ngFor="let prof of profesionales">
+        <div class="foto-miembro">
+          <img
+            [src]="prof.imagenBase64 ? 'data:image/jpeg;base64,' + prof.imagenBase64 : 'assets/img/placeholder.jpg'"
+            [alt]="prof.nombreCompleto">
+        </div>
+        <div class="info-miembro">
+          <h3>{{ prof.nombreCompleto }}</h3>
+          <p class="especialidad">{{ prof.servicio?.nombre }}</p>
+          <div class="redes-miembro">
+            <span class="icono">📧</span>
+            <span class="icono">📱</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fallback estático si el backend no tiene datos aún -->
+    <div *ngIf="!cargando && !errorCarga && profesionales.length === 0" class="equipo-grid">
       <div class="miembro-equipo">
         <div class="foto-miembro">
           <img src="assets/img/carlos.jpg" alt="Dr. Carlos Mendoza">
@@ -18,7 +47,7 @@
           <h3>Dr. Carlos Mendoza</h3>
           <p class="especialidad">Odontólogo General - Especialista en Implantología</p>
           <p class="experiencia">15 años de experiencia</p>
-          <p class="descripcion">Especializado en implantes dentales y rehabilitación oral. Miembro de la Sociedad de Implantología Chile.</p>
+          <p class="descripcion">Especializado en implantes dentales y rehabilitación oral.</p>
           <div class="redes-miembro">
             <span class="icono">📧</span>
             <span class="icono">📱</span>
@@ -33,7 +62,7 @@
           <h3>Dra. Ana López</h3>
           <p class="especialidad">Ortodoncista</p>
           <p class="experiencia">12 años de experiencia</p>
-          <p class="descripcion">Especialista en ortodoncia invisible y brackets estéticos. Certificada en Invisalign.</p>
+          <p class="descripcion">Especialista en ortodoncia invisible y brackets estéticos.</p>
           <div class="redes-miembro">
             <span class="icono">📧</span>
             <span class="icono">📱</span>
@@ -58,7 +87,7 @@
     </div>
   </section>
 
-  <!-- Equipo de apoyo -->
+  <!-- Equipo de apoyo (estático) -->
   <section id="equipo-apoyo" class="equipo-section">
     <h2>Equipo de Apoyo</h2>
     <div class="equipo-grid apoyo-grid">
@@ -81,7 +110,7 @@
           <h3>Pedro Martínez</h3>
           <p class="especialidad">Asistente Dental</p>
           <p class="experiencia">6 años de experiencia</p>
-          <p class="descripcion">Apoyo en procedimientos y atención al paciente. Certificado en esterilización.</p>
+          <p class="descripcion">Apoyo en procedimientos y atención al paciente.</p>
         </div>
       </div>
       <div class="miembro-apoyo">

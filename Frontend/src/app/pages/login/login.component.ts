@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
   textoError = '';
   pantallaVisible = true;
   loginVisible = false;
+  cargando = false;
 
   private T_EXPANSION = 800;
   private T_ROTACION_ENTRADA = 700;
@@ -26,7 +28,7 @@ export class LoginComponent implements OnInit {
 
   logoEstado: 'oculto' | 'mostrar' | 'desvanecer' | 'final' = 'oculto';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     this.iniciarSecuencia();
@@ -48,9 +50,26 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.validarCredenciales()) {
-      this.router.navigate(['/inicio']);
-    }
+    this.cargando = true;
+    this.mostrarError = false;
+
+    this.usuarioService.findAll().subscribe({
+      next: (usuarios) => {
+        const encontrado = usuarios.find(
+          u => u.username === this.usuario && u.password === this.contrasena
+        );
+        this.cargando = false;
+        if (encontrado) {
+          this.router.navigate(['/inicio']);
+        } else {
+          this.mostrarErrorTemporal('Usuario o contraseña incorrectos.');
+        }
+      },
+      error: () => {
+        this.cargando = false;
+        this.mostrarErrorTemporal('No se pudo conectar al servidor. Intente nuevamente.');
+      }
+    });
   }
 
   accederInvitado(): void {
@@ -58,21 +77,9 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/inicio']);
   }
 
-  private validarCredenciales(): boolean {
-    this.mostrarError = false;
-    const usuarioCorrecto = 'Blas';
-    const contrasenCorrecta = '123';
-
-    if (
-      this.usuario.toLowerCase() === usuarioCorrecto.toLowerCase() &&
-      this.contrasena === contrasenCorrecta
-    ) {
-      return true;
-    }
-
-    this.textoError = 'Usuario o contraseña incorrectos. Inténtalo de nuevo. Usuario: Blas | Contraseña: 123';
+  private mostrarErrorTemporal(mensaje: string): void {
+    this.textoError = mensaje;
     this.mostrarError = true;
     setTimeout(() => { this.mostrarError = false; }, this.T_DURACION_ERROR);
-    return false;
   }
 }
