@@ -299,26 +299,7 @@ Usuario en el navegador
 
 ---
 
-## 6. Quién decidió guardar las imágenes en Base64
-
-**Lo decidió el Backend (Ignacio).** Está en [ProfesionalEntity.java](Backend/src/main/java/com/example/demo/entity/ProfesionalEntity.java):
-
-```java
-@Column(columnDefinition = "TEXT")
-private String imagenBase64;
-```
-
-Dos decisiones importantes ahí:
-
-1. **El nombre del campo es `imagenBase64`** — Ignacio nombró el campo así, lo que indica explícitamente que espera recibir la imagen ya convertida a Base64, no un archivo ni una URL.
-
-2. **`columnDefinition = "TEXT"`** — Por defecto, un `String` en Java se guarda en PostgreSQL como `VARCHAR(255)` (máximo 255 caracteres). Una imagen en Base64 puede pesar miles de caracteres. Con `TEXT` no hay límite de longitud.
-
-El Frontend simplemente respeta esa decisión: en [profesional.model.ts](Frontend/src/app/models/profesional.model.ts) el campo es `imagenBase64: string` porque el Backend ya definió que ese es el formato.
-
----
-
-## 7. Comparación entre entidades Backend (Java) y Frontend (TypeScript)
+## 6. Comparación entre entidades Backend (Java) y Frontend (TypeScript)
 
 El flujo completo de un dato es:
 
