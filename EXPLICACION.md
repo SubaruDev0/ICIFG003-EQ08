@@ -11,9 +11,6 @@ El proyecto tenía dos ramas separadas trabajadas por personas distintas:
 
 Ninguna rama sabía de la otra. Había que unirlas en un mismo lugar para que pudieran funcionar juntas.
 
-### Qué es un merge
-Un **merge** es el proceso de fusionar el historial de una rama dentro de otra. Git compara los archivos de ambas ramas y los combina. Si los archivos son distintos (uno tiene `Frontend/` y el otro tiene `Backend/`), Git simplemente los une sin conflicto.
-
 ### Cómo se hizo paso a paso
 
 **Paso 1 — Crear la rama FullStack desde Frontend:**
@@ -52,7 +49,7 @@ FullStack/
 ### Qué es una entidad
 Una **entidad** representa un objeto del mundo real que el sistema necesita guardar en la base de datos. Cada entidad se convierte en una tabla en PostgreSQL.
 
-Ignacio las creó en Java con `@Entity` (Spring Boot). Nosotros las recreamos en TypeScript como `interface` (Angular). Son el mismo concepto, expresado en cada lenguaje.
+Ignacio las creó en Java con `@Entity` (Spring Boot). Subaru las recreo en TypeScript como `interface` (Angular). Son el mismo concepto, expresado en cada lenguaje.
 
 ### Por qué existen las dos versiones
 
@@ -299,3 +296,279 @@ Usuario en el navegador
 | PORT como variable | Render asigna el puerto dinámicamente; si hardcodeas falla el deploy |
 | .env | Archivo local con los valores reales, ignorado por git |
 | .env.example | Plantilla que sí va a git, para que otros sepan qué variables definir |
+
+---
+
+## 6. Quién decidió guardar las imágenes en Base64
+
+**Lo decidió el Backend (Ignacio).** Está en [ProfesionalEntity.java](Backend/src/main/java/com/example/demo/entity/ProfesionalEntity.java):
+
+```java
+@Column(columnDefinition = "TEXT")
+private String imagenBase64;
+```
+
+Dos decisiones importantes ahí:
+
+1. **El nombre del campo es `imagenBase64`** — Ignacio nombró el campo así, lo que indica explícitamente que espera recibir la imagen ya convertida a Base64, no un archivo ni una URL.
+
+2. **`columnDefinition = "TEXT"`** — Por defecto, un `String` en Java se guarda en PostgreSQL como `VARCHAR(255)` (máximo 255 caracteres). Una imagen en Base64 puede pesar miles de caracteres. Con `TEXT` no hay límite de longitud.
+
+El Frontend simplemente respeta esa decisión: en [profesional.model.ts](Frontend/src/app/models/profesional.model.ts) el campo es `imagenBase64: string` porque el Backend ya definió que ese es el formato.
+
+---
+
+## 7. Comparación entre entidades Backend (Java) y Frontend (TypeScript)
+
+El flujo completo de un dato es:
+
+```
+[Angular Form] → [TypeScript interface] → [JSON] → [HTTP] → [Java object] → [PostgreSQL tabla]
+```
+
+Cada entidad existe en ambos lados. El Backend es la fuente de verdad; el Frontend la espeja.
+
+---
+
+### Usuario
+
+| Aspecto | Backend (Java) | Frontend (TypeScript) |
+|---------|---------------|----------------------|
+| Archivo | `UsuarioEntity.java` | `usuario.model.ts` |
+| Tabla en BD | `usuario` | — (no toca la BD) |
+
+```java
+// BACKEND — crea la tabla y valida al guardar
+@Entity
+@Table(name = "usuario")
+public class UsuarioEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;        // Long: número grande de 64 bits
+
+    private String username;
+    private String password; // requerido, sin null
+    private String rol;
+}
+```
+
+```typescript
+// FRONTEND — solo describe la forma del dato
+export interface Usuario {
+  id?: number;        // number: engloba int y long de Java
+  username: string;
+  password?: string;  // opcional: al LEER un usuario, el back no devuelve la contraseña
+  rol: string;
+}
+```
+
+**Diferencia clave:** `password` es obligatorio en Java (el backend lo necesita para guardar) pero opcional en TypeScript (el backend nunca devuelve la contraseña al frontend por seguridad, entonces al leerlo el campo no existe).
+
+---
+
+### Paciente
+
+| Aspecto | Backend (Java) | Frontend (TypeScript) |
+|---------|---------------|----------------------|
+| Relación con Usuario | `@OneToOne` (una fila en BD referencia otra fila) | `usuario?: Usuario \| null` |
+| Columna de unión | `usuario_id` (clave foránea en la tabla `paciente`) | — (transparente para Angular) |
+
+```java
+// BACKEND
+@Entity
+@Table(name = "paciente")
+public class PacienteEntity {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nombreCompleto;
+    private String rut;
+    private String telefono;
+    private String email;
+
+    @OneToOne                          // ← relación: 1 paciente = 1 usuario
+    @JoinColumn(
+        name = "usuario_id",           // ← columna que se crea en la tabla paciente
+        referencedColumnName = "id",
+        nullable = true                // ← puede ser null (paciente sin cuenta)
+    )
+    private UsuarioEntity usuario;
+}
+```
+
+```typescript
+// FRONTEND
+export interface Paciente {
+  id?: number;
+  nombreCompleto: string;
+  rut: string;
+  telefono: string;
+  email: string;
+  usuario?: Usuario | null; // null = paciente sin cuenta registrada
+}
+```
+
+**Qué es `@OneToOne`:** significa que en la tabla `paciente` de PostgreSQL existe una columna `usuario_id`. Cuando Hibernate guarda un `PacienteEntity`, en esa columna pone el `id` del usuario relacionado. En el frontend esto es invisible: Angular solo ve el objeto `usuario` anidado dentro de `paciente`.
+
+---
+
+### Servicio
+
+La más simple. Un tratamiento tiene solo nombre.
+
+```java
+// BACKEND
+@Entity
+@Table(name = "servicio")
+public class ServicioEntity {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nombre;  // "Ortodoncia", "Implantes", etc.
+}
+```
+
+```typescript
+// FRONTEND
+export interface Servicio {
+  id?: number;
+  nombre: string;
+}
+```
+
+**Sin diferencias** conceptuales. La única diferencia técnica es `Long` vs `number`.
+
+---
+
+### Profesional
+
+Aquí está la decisión del Base64.
+
+```java
+// BACKEND
+@Entity
+@Table(name = "profesional")
+public class ProfesionalEntity {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nombreCompleto;
+
+    @Column(columnDefinition = "TEXT")  // ← TEXT porque base64 es muy largo
+    private String imagenBase64;        // ← nombre que define el contrato con el frontend
+
+    @ManyToOne                          // ← muchos profesionales pueden tener el mismo servicio
+    @JoinColumn(name = "servicio_id")   // ← columna FK en la tabla profesional
+    private ServicioEntity servicio;
+}
+```
+
+```typescript
+// FRONTEND
+export interface Profesional {
+  id?: number;
+  nombreCompleto: string;
+  imagenBase64: string;   // ← mismo nombre que el campo Java (contrato JSON)
+  servicio: Servicio;     // ← objeto anidado, no el id, el objeto completo
+}
+```
+
+**Qué es `@ManyToOne`:** muchos profesionales pueden pertenecer al mismo servicio (ej: varios dentistas hacen "Ortodoncia"). En la tabla `profesional` hay una columna `servicio_id` que apunta a qué fila de la tabla `servicio` corresponde.
+
+**Cómo se usa la imagen en el HTML:**
+```html
+<!-- Angular convierte el string base64 en una imagen real -->
+<img [src]="'data:image/jpeg;base64,' + prof.imagenBase64">
+```
+
+---
+
+### Turno
+
+La entidad más compleja: tiene relaciones con `Paciente` y `Servicio`.
+
+```java
+// BACKEND
+@Entity
+@Table(name = "turno")
+public class TurnoEntity {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Temporal(TemporalType.DATE)    // ← guarda solo la fecha, sin hora, como DATE en PostgreSQL
+    private Date fecha;             // ← tipo Date de Java
+
+    private String horario;
+
+    @Column(columnDefinition = "TEXT")
+    private String mensajeAdicional;
+
+    @ManyToOne                      // ← muchos turnos pueden tener el mismo paciente
+    @JoinColumn(name = "paciente_id")
+    private PacienteEntity paciente;
+
+    @ManyToOne                      // ← muchos turnos pueden ser del mismo servicio
+    @JoinColumn(name = "servicio_id")
+    private ServicioEntity servicio;
+}
+```
+
+```typescript
+// FRONTEND
+export interface Turno {
+  id?: number;
+  fecha: string;           // ← string "YYYY-MM-DD", NO Date de JS
+  horario: string;
+  mensajeAdicional: string;
+  paciente: Paciente;      // ← objeto completo, no solo el id
+  servicio: Servicio;      // ← objeto completo, no solo el id
+}
+```
+
+**Diferencia clave en `fecha`:** Java usa `Date`, TypeScript usa `string`. Cuando Angular envía `"2026-05-15"` como string en el JSON, Spring Boot lo convierte automáticamente a un objeto `Date` de Java gracias a `@Temporal`. No hay que hacer nada manual.
+
+**Dos `@ManyToOne`:** la tabla `turno` en PostgreSQL tiene dos columnas FK: `paciente_id` y `servicio_id`. Cuando el backend devuelve un turno, Hibernate hace automáticamente los JOINs y devuelve los objetos completos anidados — no los IDs solos.
+
+---
+
+### Flujo completo: el usuario pide un turno
+
+```
+1. Angular (pedir-turno.component.ts)
+   └─ construye objeto TypeScript:
+      {
+        fecha: "2026-05-20",
+        horario: "mañana",
+        mensajeAdicional: "Me duele una muela",
+        paciente: { nombreCompleto: "Juan", rut: "12.345.678-9", ... },
+        servicio: { id: 3, nombre: "Endodoncia" }
+      }
+
+2. TurnoService (turno.service.ts)
+   └─ this.http.post("/api/v1/turnos", turno)
+      └─ HttpClient serializa el objeto a JSON automáticamente
+
+3. JSON viaja por HTTP al Backend
+   └─ POST http://localhost:6789/api/v1/turnos
+      Content-Type: application/json
+      Body: { "fecha": "2026-05-20", "horario": "mañana", ... }
+
+4. Spring Boot (TurnoController.java)
+   └─ @PostMapping recibe el JSON
+      └─ Jackson (librería de Spring) deserializa el JSON
+         a un objeto TurnoEntity de Java automáticamente
+
+5. Spring Boot (TurnoService.java)
+   └─ turnoRepository.save(turno)
+      └─ Hibernate genera el SQL:
+         INSERT INTO turno (fecha, horario, mensaje_adicional, paciente_id, servicio_id)
+         VALUES ('2026-05-20', 'mañana', 'Me duele una muela', 42, 3)
+
+6. PostgreSQL (Neon)
+   └─ guarda la fila en la tabla turno
+      └─ devuelve la fila con el id generado (ej: id=87)
+
+7. La respuesta sube de vuelta:
+   PostgreSQL → Hibernate → Spring Boot → JSON → HTTP → Angular
+   Angular muestra: "Turno solicitado correctamente"
+```
