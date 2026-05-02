@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:6789'
+  apiUrl: 'https://icifg003-eq08-back.onrender.com'
 };

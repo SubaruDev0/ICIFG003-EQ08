@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${CORS_ALLOWED_ORIGINS:http://localhost:4200,https://icifg003-eq08.onrender.com}")
+    @Value("${CORS_ALLOWED_ORIGINS:https://icifg003-eq08.onrender.com}")
     private String[] allowedOrigins;
 
     @Override
