@@ -7,5 +7,5 @@ import com.example.demo.entity.UsuarioEntity;
 
 @Repository
 public interface UsuarioRepository extends CrudRepository<UsuarioEntity, Long> {
-
+    boolean existsByUsername(String username);
 }
