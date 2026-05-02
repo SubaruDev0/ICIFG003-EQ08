@@ -9,7 +9,6 @@ import com.example.demo.interfaces.IUsuarioService;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
-@CrossOrigin(origins = "http://localhost:4200")
 public class UsuarioController {
     
     @Autowired

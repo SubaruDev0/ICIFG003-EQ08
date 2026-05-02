@@ -9,7 +9,6 @@ import com.example.demo.interfaces.IPacienteService;
 
 @RestController
 @RequestMapping("/api/v1/pacientes")
-@CrossOrigin(origins = "http://localhost:4200")
 public class PacienteController {
     
     @Autowired

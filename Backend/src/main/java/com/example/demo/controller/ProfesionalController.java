@@ -9,7 +9,6 @@ import com.example.demo.interfaces.IProfesionalService;
 
 @RestController
 @RequestMapping("/api/v1/profesionales")
-@CrossOrigin(origins = "http://localhost:4200")
 public class ProfesionalController {
     
     @Autowired

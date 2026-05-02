@@ -17,7 +17,6 @@ import com.example.demo.interfaces.IPersonaService;
 
 @RestController
 @RequestMapping("/api/v1/entities/personas")
-@CrossOrigin(origins = "*")
 public class PersonaController {
 	
 	@Autowired

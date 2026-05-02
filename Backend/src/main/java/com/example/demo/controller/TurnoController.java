@@ -9,7 +9,6 @@ import com.example.demo.interfaces.ITurnoService;
 
 @RestController
 @RequestMapping("/api/v1/turnos")
-@CrossOrigin(origins = "http://localhost:4200")
 public class TurnoController {
     
     @Autowired
