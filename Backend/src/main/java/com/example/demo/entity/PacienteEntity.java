@@ -26,8 +26,8 @@ public class PacienteEntity {
     private String rut;
     private String telefono;
     private String email;
-
+    
     @OneToOne
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private UsuarioEntity usuario;
 }
