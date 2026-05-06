@@ -137,15 +137,28 @@ Cuando el usuario se loguea, el frontend guarda el objeto devuelto en `localStor
 
 ---
 
-## 7. CORS
+## 7. CORS — URGENTE (el backend actualmente da 403 en OPTIONS)
 
-Asegúrate de tener CORS habilitado para el origen del frontend:
+El backend rechaza preflight requests del browser. Mientras tanto el frontend usa un proxy local que evita el problema en desarrollo, pero **en producción necesitas CORS configurado**.
+
+Agrega esto en Spring Boot (en la clase principal o en un `@Configuration`):
 
 ```java
-@CrossOrigin(origins = "*")
+@Bean
+public WebMvcConfigurer corsConfigurer() {
+    return new WebMvcConfigurer() {
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*");
+        }
+    };
+}
 ```
 
-O configura un `CorsConfigurationSource` global en Spring Security.
+O con `@CrossOrigin(origins = "*")` en cada controller, o globalmente en Spring Security.
 
 ---
 

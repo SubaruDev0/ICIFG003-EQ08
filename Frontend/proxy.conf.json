@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://icifg003-eq08-back.onrender.com",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "info"
+  }
+}
