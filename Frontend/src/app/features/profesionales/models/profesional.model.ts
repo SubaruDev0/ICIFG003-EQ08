@@ -4,5 +4,5 @@ export interface Profesional {
   id?: number;
   nombreCompleto: string;
   imagenBase64: string;
-  servicio: Servicio;
+  servicio?: Servicio | null;
 }

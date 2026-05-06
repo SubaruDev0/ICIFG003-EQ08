@@ -1,0 +1,65 @@
+<div class="contenedor-registro">
+  <div class="tarjeta-registro">
+    <div class="encabezado-registro">
+      <img src="assets/img/logo.png" alt="Logo" class="logo-mini">
+      <h2>Crear Cuenta</h2>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+
+      <!-- Foto de perfil -->
+      <div class="foto-upload">
+        <div class="preview-avatar" [class.tiene-foto]="fotoPreview">
+          <img *ngIf="fotoPreview" [src]="fotoPreview" alt="preview">
+          <i *ngIf="!fotoPreview" class="fas fa-camera"></i>
+        </div>
+        <label class="btn-subir-foto">
+          <i class="fas fa-upload"></i> {{ fotoPreview ? 'Cambiar foto' : 'Subir foto de perfil' }}
+          <input type="file" (change)="onFotoChange($event)" accept="image/*" hidden>
+        </label>
+      </div>
+
+      <!-- Username -->
+      <div class="grupo-entrada">
+        <input type="text" id="reg-username" [(ngModel)]="username" name="username" required autocomplete="off">
+        <label for="reg-username"><i class="fas fa-user"></i> Usuario</label>
+      </div>
+
+      <!-- Password -->
+      <div class="grupo-entrada">
+        <input type="password" id="reg-password" [(ngModel)]="password" name="password" required>
+        <label for="reg-password"><i class="fas fa-lock"></i> Contraseña</label>
+      </div>
+
+      <!-- Selector de rol -->
+      <div class="selector-rol">
+        <button type="button" [class.activo]="rol === 'paciente'" (click)="seleccionarRol('paciente')">
+          <i class="fas fa-user-injured"></i> Paciente
+        </button>
+        <button type="button" [class.activo]="rol === 'admin'" (click)="seleccionarRol('admin')">
+          <i class="fas fa-user-md"></i> Profesional
+        </button>
+      </div>
+
+      <!-- Selector de especialidad (solo admin) -->
+      <div class="grupo-select" *ngIf="rol === 'admin'">
+        <label class="label-select"><i class="fas fa-stethoscope"></i> Especialidad</label>
+        <select [(ngModel)]="servicioSeleccionado" name="servicio" [compareWith]="compararServicio">
+          <option [ngValue]="null" disabled>Selecciona tu especialidad...</option>
+          <option *ngFor="let s of servicios" [ngValue]="s">{{ s.nombre }}</option>
+        </select>
+        <small *ngIf="servicios.length === 0" class="aviso-servicios">
+          No hay especialidades disponibles aún. Pide a un admin que las cree primero.
+        </small>
+      </div>
+
+      <button type="submit" class="boton-acceso" [disabled]="registrando">
+        <span *ngIf="!registrando"><i class="fas fa-user-plus"></i> Crear cuenta</span>
+        <span *ngIf="registrando">Registrando...</span>
+      </button>
+    </form>
+
+    <div class="separador">¿Ya tienes cuenta?</div>
+    <a routerLink="/login" class="link-login">Iniciar sesión</a>
+  </div>
+</div>

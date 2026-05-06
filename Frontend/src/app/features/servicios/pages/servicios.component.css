@@ -71,6 +71,54 @@ main {
 
 .btn-info:hover { background-color: var(--color-hover); }
 
+/* Botón admin */
+.btn-admin {
+  margin-top: 16px;
+  padding: 10px 24px;
+  background: #ffca1c;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-admin:hover { background: #e5b600; }
+
+/* Estados */
+.estado-carga, .estado-error, .estado-vacio {
+  text-align: center;
+  padding: 60px 20px;
+  color: #777;
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.estado-carga i, .estado-error i, .estado-vacio i { font-size: 3rem; }
+.estado-error { color: #e74c3c; }
+.estado-error i { color: #e74c3c; }
+.estado-vacio i { color: var(--azul-principal); }
+
+/* Icono servicio */
+.icono-servicio {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--azul-principal), var(--azul-claro));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
 .btn-contacto {
   position: fixed;
   bottom: 30px; right: 30px;

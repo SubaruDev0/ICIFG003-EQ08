@@ -291,6 +291,31 @@ h2 {
   to { transform: scale(1, 1); }
 }
 
+.separador {
+  text-align: center;
+  margin: 20px 0 12px;
+  color: #999;
+  font-size: 0.95rem;
+}
+
+.link-registro {
+  display: block;
+  text-align: center;
+  color: var(--azul-principal);
+  font-weight: bold;
+  font-size: 1rem;
+  text-decoration: none;
+  padding: 10px;
+  border: 2px solid var(--azul-principal);
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.link-registro:hover {
+  background-color: var(--azul-principal);
+  color: #fff;
+}
+
 @media (max-width: 480px) {
   .contenedor-login { max-width: 100%; box-shadow: none; }
   .tarjeta-login { padding: 40px 30px; }

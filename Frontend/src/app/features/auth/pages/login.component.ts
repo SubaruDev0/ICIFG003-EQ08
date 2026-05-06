@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { UsuarioService } from '../services/usuario.service';
+import { AuthService } from '../../../core/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
   usuario = '';
   contrasena = '';
-  mostrarError = false;
-  textoError = '';
   pantallaVisible = true;
   loginVisible = false;
   cargando = false;
@@ -24,13 +23,16 @@ export class LoginComponent implements OnInit {
   private T_ROTACION_ENTRADA = 700;
   private T_ESPERA_LOGO = 800;
   private T_ROTACION_SALIDA = 600;
-  private T_DURACION_ERROR = 4000;
 
   logoEstado: 'oculto' | 'mostrar' | 'desvanecer' | 'final' = 'oculto';
 
-  constructor(private router: Router, private usuarioService: UsuarioService) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/inicio']);
+      return;
+    }
     this.iniciarSecuencia();
   }
 
@@ -50,36 +52,24 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (!this.usuario || !this.contrasena) {
+      Swal.fire({ icon: 'warning', title: 'Campos requeridos', text: 'Completa usuario y contraseña.', confirmButtonColor: '#0fa49c' });
+      return;
+    }
     this.cargando = true;
-    this.mostrarError = false;
-
-    this.usuarioService.findAll().subscribe({
-      next: (usuarios) => {
-        const encontrado = usuarios.find(
-          u => u.username === this.usuario && u.password === this.contrasena
-        );
+    this.authService.login(this.usuario, this.contrasena).subscribe({
+      next: () => {
         this.cargando = false;
-        if (encontrado) {
-          this.router.navigate(['/inicio']);
-        } else {
-          this.mostrarErrorTemporal('Usuario o contraseña incorrectos.');
-        }
+        this.router.navigate(['/inicio']);
       },
       error: () => {
         this.cargando = false;
-        this.mostrarErrorTemporal('No se pudo conectar al servidor. Intente nuevamente.');
+        Swal.fire({ icon: 'error', title: 'Acceso denegado', text: 'Usuario o contraseña incorrectos.', confirmButtonColor: '#0fa49c' });
       }
     });
   }
 
   accederInvitado(): void {
-    this.mostrarError = false;
     this.router.navigate(['/inicio']);
-  }
-
-  private mostrarErrorTemporal(mensaje: string): void {
-    this.textoError = mensaje;
-    this.mostrarError = true;
-    setTimeout(() => { this.mostrarError = false; }, this.T_DURACION_ERROR);
   }
 }

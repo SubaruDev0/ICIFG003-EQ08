@@ -1,0 +1,126 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--fondo-claro);
+}
+
+.pagina-crear {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 50px 20px;
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 520px;
+  opacity: 0;
+  border-top: 5px solid var(--azul-principal);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.icono-titulo {
+  font-size: 2.5rem;
+  color: var(--azul-principal);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.form-header h2 {
+  font-size: 1.8rem;
+  color: var(--azul-principal);
+  margin-bottom: 8px;
+}
+
+.form-header p {
+  color: #777;
+  font-size: 0.95rem;
+}
+
+.campo {
+  margin-bottom: 28px;
+}
+
+.campo label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.campo input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  color: #333;
+  outline: none;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.campo input:focus { border-color: var(--azul-principal); }
+.campo input::placeholder { color: #bbb; }
+
+.acciones {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.btn-cancelar {
+  flex: 1;
+  padding: 14px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  color: #666;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.btn-cancelar:hover { border-color: #999; color: #333; }
+
+.btn-guardar {
+  flex: 1;
+  padding: 14px;
+  background: var(--color-secundario);
+  color: #333;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-guardar:hover:not(:disabled) { background: #e5b600; }
+.btn-guardar:disabled { opacity: 0.6; cursor: not-allowed; }
+
+@media (max-width: 600px) {
+  .form-card { padding: 30px 20px; }
+  .acciones { flex-direction: column; }
+}

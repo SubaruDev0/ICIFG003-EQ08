@@ -3,4 +3,5 @@ export interface Usuario {
   username: string;
   password?: string;
   rol: string;
+  imagenBase64?: string;
 }

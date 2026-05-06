@@ -1,14 +1,36 @@
 <header>
   <div class="logo">
-    <img src="assets/img/logo.png" alt="Clínica Dental Logo">
+    <a routerLink="/inicio"><img src="assets/img/logo.png" alt="Clínica Dental Logo"></a>
   </div>
+
   <nav>
     <ul>
       <li><a routerLink="/inicio" routerLinkActive="active">Inicio</a></li>
       <li><a routerLink="/servicios" routerLinkActive="active">Servicios</a></li>
       <li><a routerLink="/equipo" routerLinkActive="active">Equipo</a></li>
       <li><a routerLink="/contacto" routerLinkActive="active">Contacto</a></li>
-      <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
+      <li *ngIf="isAdmin">
+        <a routerLink="/admin/servicios/nuevo" routerLinkActive="active" class="link-admin">
+          <i class="fas fa-plus-circle"></i> Crear Servicio
+        </a>
+      </li>
+      <li *ngIf="!isLoggedIn">
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+      </li>
     </ul>
   </nav>
+
+  <!-- Usuario logueado -->
+  <div class="user-section" *ngIf="isLoggedIn">
+    <div class="user-avatar">
+      <img [src]="avatarSrc" alt="foto de perfil">
+    </div>
+    <div class="user-info">
+      <span class="username">{{ currentUser?.username }}</span>
+      <span class="role">{{ rolLabel }}</span>
+    </div>
+    <button class="btn-logout" (click)="logout()" title="Cerrar sesión">
+      <i class="fas fa-sign-out-alt"></i>
+    </button>
+  </div>
 </header>

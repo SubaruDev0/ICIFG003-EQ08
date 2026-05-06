@@ -34,10 +34,13 @@
         <a href="#" class="olvide-contrasena">¿Olvidaste la contraseña?</a>
       </div>
 
-      <div class="mensaje-error" *ngIf="mostrarError">{{ textoError }}</div>
-
-      <button type="submit" class="boton-acceso">Acceder</button>
+      <button type="submit" class="boton-acceso" [disabled]="cargando">
+        {{ cargando ? 'Verificando...' : 'Acceder' }}
+      </button>
       <button type="button" class="boton-invitado" (click)="accederInvitado()">Acceder como invitado</button>
     </form>
+
+    <div class="separador">¿No tienes cuenta?</div>
+    <a routerLink="/register" class="link-registro">Crear cuenta nueva</a>
   </div>
 </div>

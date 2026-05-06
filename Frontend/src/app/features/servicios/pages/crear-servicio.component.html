@@ -1,0 +1,37 @@
+<app-header></app-header>
+
+<main class="pagina-crear">
+  <div class="form-card" style="opacity:0">
+    <div class="form-header">
+      <i class="fas fa-plus-circle icono-titulo"></i>
+      <h2>Crear Nuevo Servicio</h2>
+      <p>El servicio quedará disponible en la base de datos y se mostrará en la página de servicios.</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="campo">
+        <label for="nombre"><i class="fas fa-tag"></i> Nombre del servicio</label>
+        <input
+          type="text"
+          id="nombre"
+          [(ngModel)]="nombre"
+          name="nombre"
+          placeholder="Ej: Ortodoncia, Implantes dentales..."
+          required
+          autocomplete="off">
+      </div>
+
+      <div class="acciones">
+        <a routerLink="/servicios" class="btn-cancelar">
+          <i class="fas fa-arrow-left"></i> Cancelar
+        </a>
+        <button type="submit" class="btn-guardar" [disabled]="guardando">
+          <i class="fas fa-save"></i>
+          {{ guardando ? 'Guardando...' : 'Guardar Servicio' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<app-footer></app-footer>

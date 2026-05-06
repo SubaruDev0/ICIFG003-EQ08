@@ -1,0 +1,252 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #087872;
+  padding: 30px 15px;
+}
+
+.contenedor-registro {
+  width: 100%;
+  max-width: 520px;
+}
+
+.tarjeta-registro {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  opacity: 0;
+}
+
+.encabezado-registro {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.logo-mini {
+  width: 140px;
+  height: auto;
+  margin-bottom: 12px;
+}
+
+h2 {
+  font-size: 1.8rem;
+  color: #0fa49c;
+  margin: 0;
+}
+
+/* Foto de perfil */
+.foto-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.preview-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px dashed #0fa49c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f0f9f8;
+  color: #0fa49c;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.preview-avatar.tiene-foto {
+  border-style: solid;
+}
+
+.preview-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.btn-subir-foto {
+  background: transparent;
+  border: 2px solid #0fa49c;
+  color: #0fa49c;
+  padding: 7px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 600;
+}
+
+.btn-subir-foto:hover {
+  background: #0fa49c;
+  color: #fff;
+}
+
+/* Inputs */
+.grupo-entrada {
+  position: relative;
+  margin-bottom: 36px;
+}
+
+.grupo-entrada input {
+  width: 100%;
+  padding: 12px 0 5px 0;
+  font-size: 1.1rem;
+  color: #0fa49c;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  outline: none;
+  background: transparent;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.grupo-entrada input:focus { border-color: #0fa49c; }
+
+.grupo-entrada label {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  font-size: 1.1rem;
+  color: #999;
+  pointer-events: none;
+  transition: 0.4s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.grupo-entrada input:focus + label,
+.grupo-entrada input:valid + label {
+  top: -20px;
+  font-size: 0.85rem;
+  color: #0fa49c;
+}
+
+/* Selector de rol */
+.selector-rol {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.selector-rol button {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background: transparent;
+  color: #777;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.selector-rol button.activo {
+  border-color: #0fa49c;
+  background: #0fa49c;
+  color: #fff;
+}
+
+.selector-rol button:hover:not(.activo) {
+  border-color: #0fa49c;
+  color: #0fa49c;
+}
+
+/* Select especialidad */
+.grupo-select {
+  margin-bottom: 24px;
+}
+
+.label-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #777;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.grupo-select select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.grupo-select select:focus { border-color: #0fa49c; }
+
+.aviso-servicios {
+  display: block;
+  margin-top: 6px;
+  color: #e67e22;
+  font-size: 0.85rem;
+}
+
+/* Botón submit */
+.boton-acceso {
+  width: 100%;
+  padding: 16px;
+  background: #ffca1c;
+  color: #333;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.boton-acceso:hover:not(:disabled) { background: #e5b600; }
+.boton-acceso:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.separador {
+  text-align: center;
+  color: #999;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.link-login {
+  display: block;
+  text-align: center;
+  color: #0fa49c;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 10px;
+  border: 2px solid #0fa49c;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.link-login:hover {
+  background: #0fa49c;
+  color: #fff;
+}
+
+@media (max-width: 480px) {
+  .tarjeta-registro { padding: 30px 20px; }
+  h2 { font-size: 1.5rem; }
+}
