@@ -8,12 +8,12 @@
 
   <!-- Mensaje de éxito -->
   <div *ngIf="exito" class="alert-success">
-    ✅ Turno solicitado correctamente. Nos contactaremos para confirmar.
+    <i class="fas fa-check-circle"></i> Turno solicitado correctamente. Nos contactaremos para confirmar.
   </div>
 
   <!-- Mensaje de error -->
   <div *ngIf="errorEnvio" class="alert-error">
-    ⚠️ {{ errorEnvio }}
+    <i class="fas fa-exclamation-triangle"></i> {{ errorEnvio }}
   </div>
 
   <section id="turnos" class="form-section">
@@ -96,19 +96,19 @@
   <section class="info-section">
     <div class="info-grid">
       <div class="info-card">
-        <h3>📞 Contacto Rápido</h3>
+        <h3><i class="fas fa-phone"></i> Contacto Rápido</h3>
         <p>Si prefiere, puede contactarnos directamente:</p>
         <p><strong>Teléfono:</strong> +56 9 1234 5678</p>
         <p><strong>Email:</strong> turnos&#64;clinicadental.cl</p>
       </div>
       <div class="info-card">
-        <h3>🕒 Horarios de Atención</h3>
+        <h3><i class="fas fa-clock"></i> Horarios de Atención</h3>
         <p><strong>Lunes a Viernes:</strong> 9:00 - 20:00 hrs</p>
         <p><strong>Sábados:</strong> 9:00 - 14:00 hrs</p>
         <p><strong>Domingos:</strong> Cerrado</p>
       </div>
       <div class="info-card">
-        <h3>🚑 Urgencias Dentales</h3>
+        <h3><i class="fas fa-ambulance"></i> Urgencias Dentales</h3>
         <p>Para emergencias fuera de horario:</p>
         <p><strong>Urgencias:</strong> +56 9 8765 4321</p>
         <p>Atendemos emergencias las 24 horas</p>

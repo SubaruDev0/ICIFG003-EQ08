@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { HeaderComponent } from '../../../shared/components/header.component';
 import { FooterComponent } from '../../../shared/components/footer.component';
 import { ServicioService } from '../../servicios/services/servicio.service';
@@ -33,6 +34,7 @@ export class PedirTurnoComponent implements OnInit {
   errorEnvio = '';
 
   constructor(
+    private route: ActivatedRoute,
     private servicioService: ServicioService,
     private pacienteService: PacienteService,
     private turnoService: TurnoService
@@ -40,8 +42,16 @@ export class PedirTurnoComponent implements OnInit {
 
   ngOnInit(): void {
     this.fechaMin = new Date().toISOString().split('T')[0];
+    const servicioIdParam = this.route.snapshot.queryParamMap.get('servicioId');
+
     this.servicioService.findAll().subscribe({
-      next: (data) => { this.servicios = data; },
+      next: (data) => {
+        this.servicios = data;
+        if (servicioIdParam) {
+          const id = Number(servicioIdParam);
+          this.servicioSeleccionado = this.servicios.find(s => s.id === id) || null;
+        }
+      },
       error: () => { this.servicios = []; }
     });
   }
@@ -63,6 +73,11 @@ export class PedirTurnoComponent implements OnInit {
       return;
     }
 
+    if (!this.terminos) {
+      this.errorEnvio = 'Debe aceptar los términos y condiciones.';
+      return;
+    }
+
     this.enviando = true;
     this.errorEnvio = '';
 
@@ -75,12 +90,12 @@ export class PedirTurnoComponent implements OnInit {
 
     this.pacienteService.save(paciente).subscribe({
       next: (pacienteCreado) => {
-        const turno = {
+        const turno: any = {
           fecha: this.fecha,
           horario: this.horario,
           mensajeAdicional: this.mensaje,
-          paciente: pacienteCreado,
-          servicio: this.servicioSeleccionado!
+          paciente: { id: pacienteCreado.id },
+          servicio: { id: this.servicioSeleccionado!.id }
         };
 
         this.turnoService.save(turno).subscribe({
@@ -91,13 +106,13 @@ export class PedirTurnoComponent implements OnInit {
           },
           error: () => {
             this.enviando = false;
-            this.errorEnvio = 'Error al registrar el turno. Intente nuevamente.';
+            this.errorEnvio = 'Error al registrar el turno. El horario podría no estar disponible.';
           }
         });
       },
       error: () => {
         this.enviando = false;
-        this.errorEnvio = 'Error al registrar el paciente. Intente nuevamente.';
+        this.errorEnvio = 'Error al registrar el paciente. Verifique los datos ingresados.';
       }
     });
   }

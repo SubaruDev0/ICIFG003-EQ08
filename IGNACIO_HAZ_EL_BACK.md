@@ -137,7 +137,26 @@ Cuando el usuario se loguea, el frontend guarda el objeto devuelto en `localStor
 
 ---
 
-## 7. CORS — URGENTE (el backend actualmente da 403 en OPTIONS)
+## 7. Gestión de Turnos y Disponibilidad (Sincronización necesaria)
+
+Para que el formulario de "Pedir Turno" sea profesional, necesitamos que los campos coincidan con el modelo real y que la disponibilidad sea dinámica:
+
+1. **Sincronización de Entidades:**
+   - **PacienteEntity:** Asegúrate de que tenga `nombreCompleto`, `rut`, `telefono` y `email`.
+   - **TurnoEntity:** Debe tener `fecha` (DATE), `horario` (String), `mensajeAdicional` (TEXT), `paciente` (FK) y `servicio` (FK). El frontend enviará objetos completos para `paciente` y `servicio`, asegúrate de que el JSON se mapee bien.
+
+2. **Endpoint de Horarios Disponibles (PENDIENTE):**
+   - Actualmente el frontend usa horarios estáticos ("Mañana", "Tarde"). Necesitamos un endpoint:
+     `GET /api/v1/turnos/disponibles?servicioId=1&fecha=2024-05-10`
+   - Este endpoint debería devolver un array de strings con las horas disponibles (ej: `["09:00", "09:30", "10:00"]`).
+   - El backend debe validar que la fecha no sea pasada ni domingo.
+
+3. **Validación de Datos:**
+   - No permitas crear turnos si el `Paciente` no tiene el `rut` o `email` bien formateado.
+
+---
+
+## 8. CORS — URGENTE (el backend actualmente da 403 en OPTIONS)
 
 El backend rechaza preflight requests del browser. Mientras tanto el frontend usa un proxy local que evita el problema en desarrollo, pero **en producción necesitas CORS configurado**.
 

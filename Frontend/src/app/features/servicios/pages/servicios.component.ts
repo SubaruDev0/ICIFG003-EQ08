@@ -43,6 +43,12 @@ export class ServiciosComponent implements OnInit {
   }
 
   get isAdmin(): boolean { return this.authService.isAdmin(); }
-  irAPedirTurno(): void { this.router.navigate(['/pedir-turno']); }
+  irAPedirTurno(servicio?: Servicio): void {
+    if (servicio) {
+      this.router.navigate(['/pedir-turno'], { queryParams: { servicioId: servicio.id } });
+    } else {
+      this.router.navigate(['/pedir-turno']);
+    }
+  }
   irACrearServicio(): void { this.router.navigate(['/admin/servicios/nuevo']); }
 }
