@@ -8,13 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.example.demo.entity.enums.RolUsuario;
-import javax.persistence.Enumerated;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.EnumType;
 import javax.persistence.Column;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
-import com.example.demo.entity.enums.RolUsuario;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +31,8 @@ public class UsuarioEntity {
     private Long id;
     
     private String username;
+
+    @JsonIgnore
     private String password;
     
     @Enumerated(EnumType.STRING)
@@ -39,4 +41,7 @@ public class UsuarioEntity {
     @Column(name = "fecha_creacion", updatable = false)
     @CreationTimestamp
     private LocalDateTime fechaCreacion;
+
+    @Column(name = "imagen_base64", columnDefinition = "TEXT")
+    private String imagenBase64;
 }

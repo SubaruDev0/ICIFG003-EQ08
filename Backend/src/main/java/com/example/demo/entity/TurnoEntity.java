@@ -25,13 +25,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.example.demo.entity.enums.HorarioTurno;
-import com.example.demo.entity.enums.EstadoTurno;
-import javax.persistence.Enumerated;
 import javax.persistence.EnumType;
+
 import javax.persistence.Column;
-import org.hibernate.annotations.CreationTimestamp;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "turno")
@@ -68,4 +65,6 @@ public class TurnoEntity {
     @Column(name = "fecha_creacion", updatable = false)
     @CreationTimestamp
     private LocalDateTime fechaCreacion;
+
+    
 }
