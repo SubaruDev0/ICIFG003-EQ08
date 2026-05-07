@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.PacienteEntity;
 import com.example.demo.interfaces.IPacienteService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/pacientes")
 public class PacienteController {
@@ -33,7 +35,7 @@ public class PacienteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody PacienteEntity paciente){
+    public ResponseEntity<?> save(@Valid @RequestBody PacienteEntity paciente){
         try {
             return ResponseEntity.ok(pacienteService.save(paciente));
         } catch (Exception e) {
@@ -42,7 +44,7 @@ public class PacienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody PacienteEntity paciente, @PathVariable Long id){
+    public ResponseEntity<?> update(@Valid @RequestBody PacienteEntity paciente, @PathVariable Long id){
         try {
             PacienteEntity existingPaciente = pacienteService.findById(id);
             if (existingPaciente == null) {

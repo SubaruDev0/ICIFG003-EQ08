@@ -27,8 +27,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 
-import javax.persistence.Column;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name = "turno")

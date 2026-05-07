@@ -15,6 +15,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+
+
 
 @Entity
 @Table(name = "paciente")
@@ -27,8 +31,12 @@ public class PacienteEntity {
     private Long id;
     
     private String nombreCompleto;
+    
+    @Pattern(regexp = "^[0-9]+-[0-9kK]{1}$", message = "Formato de RUT inválido")
     private String rut;
     private String telefono;
+    
+    @Email(message = "El email debe ser válido")
     private String email;
     
     @OneToOne

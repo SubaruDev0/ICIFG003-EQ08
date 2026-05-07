@@ -4,7 +4,7 @@ El frontend está listo y preparado para conectarse. Abajo está todo lo que el 
 
 ---
 
-## 1. Columna nueva en la tabla `usuario`
+## 1. Columna nueva en la tabla `usuario` (Listo)
 
 Agrega la columna `imagen_base64` de tipo `TEXT` (es un string base64 de la imagen de perfil).
 
