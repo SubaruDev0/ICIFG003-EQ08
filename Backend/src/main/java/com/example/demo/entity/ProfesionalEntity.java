@@ -29,6 +29,6 @@ public class ProfesionalEntity {
     private String imagenBase64;
 
     @ManyToOne
-    @JoinColumn(name = "servicio_id")
+    @JoinColumn(name = "servicio_id", nullable = true) // 
     private ServicioEntity servicio;
 }
