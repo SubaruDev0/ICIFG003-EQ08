@@ -12,6 +12,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "paciente")
 @Data
@@ -30,4 +34,8 @@ public class PacienteEntity {
     @OneToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private UsuarioEntity usuario;
+
+    @Column(name = "fecha_creacion", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime fechaCreacion;
 }

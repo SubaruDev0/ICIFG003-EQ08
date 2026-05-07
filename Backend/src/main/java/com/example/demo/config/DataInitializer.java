@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.entity.UsuarioEntity;
 import com.example.demo.repository.UsuarioRepository;
+import com.example.demo.entity.enums.RolUsuario;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -31,7 +32,7 @@ public class DataInitializer implements CommandLineRunner {
             UsuarioEntity admin = new UsuarioEntity();
             admin.setUsername(adminUsername);
             admin.setPassword(adminPassword);
-            admin.setRol(adminRole);
+            admin.setRol(RolUsuario.valueOf(adminRole.toUpperCase()));
             usuarioRepository.save(admin);
         }
     }
