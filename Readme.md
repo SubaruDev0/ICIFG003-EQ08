@@ -51,10 +51,28 @@ Frontend local:
 
 Nota corta y humana sobre `--proxy-config`: ese parámetro le dice a Angular que las rutas `/api` las mande al backend, así evitamos problemas de CORS en desarrollo.
 
-## 4. Probar base de datos Neon desde terminal (`psql`)
-Conexión directa:
+## 4. Crear y probar base de datos local (PostgreSQL + `psql`)
+
+Requisitos:
+- PostgreSQL instalado localmente (incluye `psql`)
+
+Crear la base de datos local (si no existe):
+
 ```bash
-psql "postgresql://neondb_owner:npg_9S2vxOtCweTu@ep-polished-band-acvrt1m0-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require"
+createdb -U postgres clinica_dental
+```
+
+Alternativa desde `psql`:
+
+```bash
+psql -U postgres -d postgres
+CREATE DATABASE clinica_dental;
+\q
+```
+
+Conectarte con `psql` a la base local (nombre: `clinica_dental`):
+```bash
+psql -U postgres -d clinica_dental
 ```
 
 Ver tablas:
@@ -69,6 +87,10 @@ SELECT id, nombre FROM servicio ORDER BY id;
 SELECT id, nombre_completo, servicio_id FROM profesional ORDER BY id;
 SELECT id, nombre_completo, rut, usuario_id FROM paciente ORDER BY id;
 SELECT id, fecha, horario, paciente_id, servicio_id, estado FROM turno ORDER BY id;
+
+-- Extras útiles
+SELECT COUNT(*) AS total_usuarios FROM usuario;
+SELECT COUNT(*) AS total_turnos FROM turno;
 ```
 
 ## 5. Poblar la base de datos (seed)

@@ -146,7 +146,7 @@ Cada componente tiene tres archivos: `.ts` (lógica), `.html` (estructura), `.cs
 
 ---
 
-## Conexión con el Backend (Spring Boot + Neon PostgreSQL)
+## Conexión con el Backend (Spring Boot + PostgreSQL local)
 
 ### Pasos generales
 
@@ -231,21 +231,19 @@ Para que Angular (puerto 4200) pueda hablar con Spring Boot (puerto 8080), el ba
 public class TurnoController { ... }
 ```
 
-**5. Configurar la conexión a Neon (PostgreSQL serverless)**
+**5. Configurar la conexión a PostgreSQL local**
 
 En el backend Spring Boot, en `application.properties`:
 
 ```properties
-# Cadena de conexión de Neon (la obtienes desde el dashboard de neon.tech)
-spring.datasource.url=jdbc:postgresql://ep-xxxx.us-east-2.aws.neon.tech/neondb?sslmode=require
-spring.datasource.username=tu_usuario
-spring.datasource.password=tu_contraseña
+# PostgreSQL local
+spring.datasource.url=jdbc:postgresql://localhost:5432/clinica_dental
+spring.datasource.username=postgres
+spring.datasource.password=postgres
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 ```
-
-> La cadena de conexión completa la obtienes en [neon.tech](https://neon.tech) → tu proyecto → "Connection string" → formato JDBC.
 
 **6. Para producción: cambiar la URL base del API**
 
