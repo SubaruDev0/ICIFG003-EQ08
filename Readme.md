@@ -1,9 +1,9 @@
-# ICIFG003-EQ08 - Guía de Levantamiento Local (Profesor)
+# ICIFG003-EQ08 - Guía de Levantamiento Local
 
 Link producción Frontend: https://icifg003-eq08.onrender.com  
 Link producción Backend: https://icifg003-eq08-back.onrender.com
 
-Este repositorio está preparado para evaluación académica. **Las variables de entorno están expuestas intencionalmente** para facilitar la revisión.
+**Las variables de entorno están expuestas intencionalmente** para facilitar la revisión. (no hacer esto en casa xd)
 
 ## 1. Clonar el repositorio
 ```bash
