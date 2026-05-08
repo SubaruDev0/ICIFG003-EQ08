@@ -5,6 +5,8 @@ import com.example.demo.entity.enums.EstadoTurno;
 import com.example.demo.entity.enums.RolUsuario;
 import com.example.demo.repository.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -38,19 +40,22 @@ public class SeedController {
     private final ProfesionalRepository profesionalRepository;
     private final PacienteRepository pacienteRepository;
     private final TurnoRepository turnoRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     public SeedController(
         UsuarioRepository usuarioRepository,
         ServicioRepository servicioRepository,
         ProfesionalRepository profesionalRepository,
         PacienteRepository pacienteRepository,
-        TurnoRepository turnoRepository
+        TurnoRepository turnoRepository,
+        JdbcTemplate jdbcTemplate
     ) {
         this.usuarioRepository = usuarioRepository;
         this.servicioRepository = servicioRepository;
         this.profesionalRepository = profesionalRepository;
         this.pacienteRepository = pacienteRepository;
         this.turnoRepository = turnoRepository;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @PostMapping
@@ -118,12 +123,9 @@ public class SeedController {
     }
 
     @DeleteMapping
+    @Transactional
     public ResponseEntity<?> resetAll() {
-        turnoRepository.deleteAll();
-        pacienteRepository.deleteAll();
-        profesionalRepository.deleteAll();
-        servicioRepository.deleteAll();
-        usuarioRepository.deleteAll();
+        jdbcTemplate.execute("TRUNCATE TABLE turno, paciente, profesional, servicio, usuario RESTART IDENTITY CASCADE");
         return ResponseEntity.ok("Base de datos limpia. Corré POST /api/v1/seed para volver a poblar.");
     }
 
