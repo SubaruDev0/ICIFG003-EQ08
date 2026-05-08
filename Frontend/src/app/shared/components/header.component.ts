@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
   }
 
   get isLoggedIn(): boolean { return !!this.currentUser; }
-  get isAdmin(): boolean { return this.currentUser?.rol === 'admin'; }
+  get isAdmin(): boolean { return this.currentUser?.rol === 'ADMIN'; }
 
   get avatarSrc(): string {
     if (this.currentUser?.imagenBase64) {
@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit {
   }
 
   get rolLabel(): string {
-    return this.currentUser?.rol === 'admin' ? 'Administrador' : 'Paciente';
+    return this.currentUser?.rol === 'ADMIN' ? 'Administrador' : 'Paciente';
   }
 
   logout(): void {

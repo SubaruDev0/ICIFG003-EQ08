@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.TurnoEntity;
 import com.example.demo.interfaces.ITurnoService;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/api/v1/turnos")
 public class TurnoController {
@@ -35,9 +37,29 @@ public class TurnoController {
     @PostMapping
     public ResponseEntity<?> save(@RequestBody TurnoEntity turno){
         try {
+            if (turno.getServicio() == null || turno.getServicio().getId() == null) {
+                return ResponseEntity.badRequest().body("servicio.id es obligatorio");
+            }
+            if (turno.getFecha() == null || turno.getHorario() == null || turno.getHorario().trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("fecha y horario son obligatorios");
+            }
             return ResponseEntity.ok(turnoService.save(turno));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(404).body(e);
+        }
+    }
+
+    @GetMapping("/disponibles")
+    public ResponseEntity<?> horariosDisponibles(
+        @RequestParam(required = false) Long servicioId,
+        @RequestParam String fecha
+    ) {
+        try {
+            return ResponseEntity.ok(turnoService.obtenerHorariosDisponibles(servicioId, LocalDate.parse(fecha)));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

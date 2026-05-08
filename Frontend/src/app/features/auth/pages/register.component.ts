@@ -3,7 +3,6 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
-import { ProfesionalService } from '../../profesionales/services/profesional.service';
 import { ServicioService } from '../../servicios/services/servicio.service';
 import { Servicio } from '../../servicios/models/servicio.model';
 import Swal from 'sweetalert2';
@@ -29,7 +28,6 @@ export class RegisterComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private profesionalService: ProfesionalService,
     private servicioService: ServicioService
   ) {}
 
@@ -78,23 +76,16 @@ export class RegisterComponent implements OnInit {
     }
 
     this.registrando = true;
-    const userData = { username: this.username, password: this.password, rol: this.rol, imagenBase64: this.imagenBase64 };
+    const userData = {
+      username: this.username,
+      password: this.password,
+      rol: this.rol,
+      imagenBase64: this.imagenBase64,
+      servicioId: this.rol === 'admin' ? this.servicioSeleccionado?.id : undefined
+    };
 
     this.authService.register(userData).subscribe({
-      next: (usuario) => {
-        if (this.rol === 'admin') {
-          this.profesionalService.save({
-            nombreCompleto: usuario.username,
-            imagenBase64: this.imagenBase64,
-            servicio: this.servicioSeleccionado!
-          }).subscribe({
-            next: () => this.finalizarRegistro(),
-            error: () => this.finalizarRegistro()
-          });
-        } else {
-          this.finalizarRegistro();
-        }
-      },
+      next: () => this.finalizarRegistro(),
       error: () => {
         this.registrando = false;
         Swal.fire({ icon: 'error', title: 'Error al registrar', text: 'No se pudo crear la cuenta. Intenta nuevamente.', confirmButtonColor: '#0fa49c' });

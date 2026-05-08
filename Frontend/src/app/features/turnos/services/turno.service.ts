@@ -22,6 +22,10 @@ export class TurnoService {
     return this.http.post<Turno>(this.url, turno);
   }
 
+  horariosDisponibles(servicioId: number, fecha: string): Observable<string[]> {
+    return this.http.get<string[]>(`${this.url}/disponibles?servicioId=${servicioId}&fecha=${fecha}`);
+  }
+
   update(id: number, turno: Turno): Observable<Turno> {
     return this.http.put<Turno>(`${this.url}/${id}`, turno);
   }

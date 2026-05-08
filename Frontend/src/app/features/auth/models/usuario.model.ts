@@ -1,4 +1,4 @@
-export type RolUsuario = 'ADMIN' | 'USER' | 'GUEST'; // Define los roles permitidos
+export type RolUsuario = 'ADMIN' | 'PACIENTE' | 'PROFESIONAL';
 
 export interface Usuario {
   id?: number;

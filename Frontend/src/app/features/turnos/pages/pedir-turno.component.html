@@ -47,7 +47,7 @@
 
         <div class="form-group">
           <label for="servicio">Servicio Solicitado *</label>
-          <select id="servicio" [(ngModel)]="servicioSeleccionado" name="servicio" required>
+          <select id="servicio" [(ngModel)]="servicioSeleccionado" name="servicio" (ngModelChange)="onServicioChange()" required>
             <option [ngValue]="null" disabled selected>Seleccione un servicio</option>
             <option *ngFor="let s of servicios" [ngValue]="s">{{ s.nombre }}</option>
           </select>
@@ -59,17 +59,18 @@
         <div class="form-group">
           <label for="fecha">Fecha Preferida *</label>
           <input type="date" id="fecha" [(ngModel)]="fecha" name="fecha"
-                 [min]="fechaMin" required>
+                 [min]="fechaMin" (ngModelChange)="onFechaChange()" required>
         </div>
 
         <div class="form-group">
           <label for="horario">Horario Preferido *</label>
           <select id="horario" [(ngModel)]="horario" name="horario" required>
             <option value="" disabled selected>Seleccione un horario</option>
-            <option value="mañana">Mañana (9:00 - 12:00)</option>
-            <option value="tarde">Tarde (15:00 - 19:00)</option>
-            <option value="sabado">Sábado (9:00 - 13:00)</option>
+            <option *ngFor="let h of horariosDisponibles" [value]="h">{{ h }}</option>
           </select>
+          <small *ngIf="fecha && servicioSeleccionado && horariosDisponibles.length === 0" class="help-text">
+            No hay horarios disponibles para esa fecha/servicio.
+          </small>
         </div>
 
         <div class="form-group full-width">

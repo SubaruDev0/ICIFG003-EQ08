@@ -4,27 +4,38 @@ import { Observable, map } from 'rxjs';
 import { Usuario } from '../../features/auth/models/usuario.model';
 import { environment } from '../../../environments/environment';
 
+interface LoginPayload {
+  username: string;
+  password: string;
+}
+
+interface RegisterPayload {
+  username: string;
+  password: string;
+  rol: 'admin' | 'paciente';
+  imagenBase64?: string;
+  servicioId?: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly USER_KEY = 'clinica_current_user';
-  private readonly URL = `${environment.apiUrl}/api/v1/usuarios`;
+  private readonly AUTH_URL = `${environment.apiUrl}/api/v1/auth`;
 
   constructor(private http: HttpClient) {}
 
-  // TEMPORAL: usa GET /api/v1/usuarios hasta que Ignacio implemente POST /api/v1/auth/login
   login(username: string, password: string): Observable<Usuario> {
-    return this.http.get<Usuario[]>(this.URL).pipe(
-      map(usuarios => {
-        const user = usuarios.find(u => u.username === username && u.password === password);
-        if (!user) throw new Error('Credenciales incorrectas');
+    const payload: LoginPayload = { username, password };
+    return this.http.post<Usuario>(`${this.AUTH_URL}/login`, payload).pipe(
+      map(user => {
         this.setCurrentUser(user);
         return user;
       })
     );
   }
 
-  register(userData: Omit<Usuario, 'id'>): Observable<Usuario> {
-    return this.http.post<Usuario>(this.URL, userData).pipe(
+  register(userData: RegisterPayload): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.AUTH_URL}/register`, userData).pipe(
       map(user => {
         this.setCurrentUser(user);
         return user;
@@ -46,7 +57,7 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.getCurrentUser()?.rol === 'admin';
+    return this.getCurrentUser()?.rol === 'ADMIN';
   }
 
   logout(): void {

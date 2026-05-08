@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,14 +19,12 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.example.demo.entity.enums.EstadoTurno;
-import com.example.demo.entity.enums.HorarioTurno;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.EnumType;
 
 
 
@@ -44,8 +43,7 @@ public class TurnoEntity {
     @JsonFormat(pattern = "yyyy-MM-dd") // Asegura la compatibilidad del JSON con el tipo Date
     private Date fecha;
     
-    @Enumerated(EnumType.STRING)
-    private HorarioTurno horario;
+    private String horario;
 
     @Enumerated(EnumType.STRING)
     private EstadoTurno estado = EstadoTurno.PENDIENTE;

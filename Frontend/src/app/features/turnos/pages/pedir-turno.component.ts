@@ -25,6 +25,7 @@ export class PedirTurnoComponent implements OnInit {
   servicios: Servicio[] = [];
   fecha = '';
   horario = '';
+  horariosDisponibles: string[] = [];
   mensaje = '';
   terminos = false;
   fechaMin = '';
@@ -50,9 +51,30 @@ export class PedirTurnoComponent implements OnInit {
         if (servicioIdParam) {
           const id = Number(servicioIdParam);
           this.servicioSeleccionado = this.servicios.find(s => s.id === id) || null;
+          this.cargarHorarios();
         }
       },
       error: () => { this.servicios = []; }
+    });
+  }
+
+  onServicioChange(): void {
+    this.horario = '';
+    this.cargarHorarios();
+  }
+
+  onFechaChange(): void {
+    this.horario = '';
+    this.cargarHorarios();
+  }
+
+  private cargarHorarios(): void {
+    this.horariosDisponibles = [];
+    if (!this.servicioSeleccionado?.id || !this.fecha) return;
+
+    this.turnoService.horariosDisponibles(this.servicioSeleccionado.id, this.fecha).subscribe({
+      next: (horarios) => { this.horariosDisponibles = horarios; },
+      error: () => { this.horariosDisponibles = []; }
     });
   }
 
@@ -125,6 +147,7 @@ export class PedirTurnoComponent implements OnInit {
     this.servicioSeleccionado = null;
     this.fecha = '';
     this.horario = '';
+    this.horariosDisponibles = [];
     this.mensaje = '';
     this.terminos = false;
   }
