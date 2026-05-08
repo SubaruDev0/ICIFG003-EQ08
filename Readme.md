@@ -7,7 +7,7 @@ Link producción Backend: https://icifg003-eq08-back.onrender.com
 
 ## 1. Clonar el repositorio
 ```bash
-git clone <URL_DEL_REPO>
+git clone git@github.com:SubaruDev0/ICIFG003-EQ08.git
 cd ICIFG003-EQ08
 ```
 
