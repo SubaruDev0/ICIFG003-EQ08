@@ -96,9 +96,9 @@ public class DataInitializer implements CommandLineRunner {
         pacienteUser.setImagenBase64(AVATAR_BASE64);
         pacienteUser = usuarioRepository.save(pacienteUser);
 
-        profesionalRepository.save(new ProfesionalEntity(null, "Profesional 1", AVATAR_BASE64, ortodoncia));
-        profesionalRepository.save(new ProfesionalEntity(null, "Profesional 2", AVATAR_BASE64, implantes));
-        profesionalRepository.save(new ProfesionalEntity(null, "Profesional 3", AVATAR_BASE64, endodoncia));
+        profesionalRepository.save(new ProfesionalEntity(null, "Profesional 1", AVATAR_BASE64, ortodoncia, admin));
+        profesionalRepository.save(new ProfesionalEntity(null, "Profesional 2", AVATAR_BASE64, implantes, profesional2User));
+        profesionalRepository.save(new ProfesionalEntity(null, "Profesional 3", AVATAR_BASE64, endodoncia, null));
 
         PacienteEntity paciente1 = new PacienteEntity();
         paciente1.setNombreCompleto("Paciente 1");

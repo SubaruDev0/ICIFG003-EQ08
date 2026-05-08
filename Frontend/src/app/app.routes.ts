@@ -1,24 +1,15 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './features/auth/pages/login.component';
-import { RegisterComponent } from './features/auth/pages/register.component';
-import { InicioComponent } from './features/inicio/pages/inicio.component';
-import { ServiciosComponent } from './features/servicios/pages/servicios.component';
-import { CrearServicioComponent } from './features/servicios/pages/crear-servicio.component';
-import { EquipoComponent } from './features/profesionales/pages/equipo.component';
-import { ContactoComponent } from './features/contacto/pages/contacto.component';
-import { PedirTurnoComponent } from './features/turnos/pages/pedir-turno.component';
-import { GestionarTurnosComponent } from './features/turnos/pages/gestionar-turnos.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'inicio', component: InicioComponent },
-  { path: 'servicios', component: ServiciosComponent },
-  { path: 'admin/servicios/nuevo', component: CrearServicioComponent },
-  { path: 'equipo', component: EquipoComponent },
-  { path: 'contacto', component: ContactoComponent },
-  { path: 'pedir-turno', component: PedirTurnoComponent },
-  { path: 'gestionar-turnos', component: GestionarTurnosComponent },
+  { path: 'login', loadComponent: () => import('./features/auth/pages/login.component').then(m => m.LoginComponent) },
+  { path: 'register', loadComponent: () => import('./features/auth/pages/register.component').then(m => m.RegisterComponent) },
+  { path: 'inicio', loadComponent: () => import('./features/inicio/pages/inicio.component').then(m => m.InicioComponent) },
+  { path: 'servicios', loadComponent: () => import('./features/servicios/pages/servicios.component').then(m => m.ServiciosComponent) },
+  { path: 'admin/servicios/nuevo', loadComponent: () => import('./features/servicios/pages/crear-servicio.component').then(m => m.CrearServicioComponent) },
+  { path: 'equipo', loadComponent: () => import('./features/profesionales/pages/equipo.component').then(m => m.EquipoComponent) },
+  { path: 'contacto', loadComponent: () => import('./features/contacto/pages/contacto.component').then(m => m.ContactoComponent) },
+  { path: 'pedir-turno', loadComponent: () => import('./features/turnos/pages/pedir-turno.component').then(m => m.PedirTurnoComponent) },
+  { path: 'gestionar-turnos', loadComponent: () => import('./features/turnos/pages/gestionar-turnos.component').then(m => m.GestionarTurnosComponent) },
   { path: '**', redirectTo: 'login' }
 ];

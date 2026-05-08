@@ -86,6 +86,7 @@ public class AuthController {
             ProfesionalEntity profesional = new ProfesionalEntity();
             profesional.setNombreCompleto(usuarioCreado.getUsername());
             profesional.setImagenBase64(registerRequest.getImagenBase64());
+            profesional.setUsuario(usuarioCreado);
 
             if (registerRequest.getServicioId() != null) {
                 Optional<ServicioEntity> servicioOpt = servicioRepository.findById(registerRequest.getServicioId());

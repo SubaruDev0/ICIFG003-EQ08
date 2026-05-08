@@ -17,7 +17,13 @@ public class ProfesionalService implements IProfesionalService {
 
     @Override
     public List<ProfesionalEntity> findAll() {
-        return (List<ProfesionalEntity>) profesionalRepository.findAll();
+        List<ProfesionalEntity> profesionales = (List<ProfesionalEntity>) profesionalRepository.findAll();
+        profesionales.forEach(p -> {
+            if (p.getUsuario() != null && p.getUsuario().getImagenBase64() != null && !p.getUsuario().getImagenBase64().isEmpty()) {
+                p.setImagenBase64(p.getUsuario().getImagenBase64());
+            }
+        });
+        return profesionales;
     }
 
     @Override

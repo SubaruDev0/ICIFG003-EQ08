@@ -80,11 +80,11 @@ public class SeedController {
         UsuarioEntity uPac1   = usuarioRepository.save(crearUsuario("paciente1",   "pac123",    RolUsuario.PACIENTE,    PAC_1));
         UsuarioEntity uPac2   = usuarioRepository.save(crearUsuario("paciente2",   "pac123",    RolUsuario.PACIENTE,    PAC_2));
 
-        // Profesionales vinculados a servicio y con foto
-        profesionalRepository.save(new ProfesionalEntity(null, "Dra. Sofia Martinez", PROF_2, ortodoncia));
-        profesionalRepository.save(new ProfesionalEntity(null, "Dr. Carlos Gomez",    PROF_3, implantes));
-        profesionalRepository.save(new ProfesionalEntity(null, "Dra. Ana Lopez",      PROF_4, endodoncia));
-        profesionalRepository.save(new ProfesionalEntity(null, "Admin Clinica",       PROF_1, odontologia));
+        // Profesionales vinculados a servicio, foto y usuario
+        profesionalRepository.save(new ProfesionalEntity(null, "Dra. Sofia Martinez", PROF_2, ortodoncia, uPro1));
+        profesionalRepository.save(new ProfesionalEntity(null, "Dr. Carlos Gomez",    PROF_3, implantes,  uPro2));
+        profesionalRepository.save(new ProfesionalEntity(null, "Dra. Ana Lopez",      PROF_4, endodoncia, uPro3));
+        profesionalRepository.save(new ProfesionalEntity(null, "Admin Clinica",       PROF_1, odontologia, uAdmin));
 
         // Pacientes vinculados a su usuario
         PacienteEntity pac1 = new PacienteEntity();
