@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../../shared/components/header.component';
 import { FooterComponent } from '../../../shared/components/footer.component';
+import { ServicioService } from '../../servicios/services/servicio.service';
+import { Servicio } from '../../servicios/models/servicio.model';
 
 @Component({
   selector: 'app-inicio',
@@ -14,14 +16,26 @@ import { FooterComponent } from '../../../shared/components/footer.component';
 export class InicioComponent implements AfterViewInit, OnDestroy {
   @ViewChild('carousel') carouselRef!: ElementRef<HTMLDivElement>;
   mostrarBtnTop = false;
+  servicios: Servicio[] = [];
   private autoScrollId: any;
   private readonly GAP = 30;
   private readonly AUTO_SCROLL_INTERVAL = 3000;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private servicioService: ServicioService
+  ) {}
 
   ngAfterViewInit(): void {
-    this.startAutoScroll();
+    this.servicioService.findAll().subscribe({
+      next: (data) => {
+        this.servicios = data;
+        setTimeout(() => this.startAutoScroll(), 100);
+      },
+      error: () => {
+        this.servicios = [];
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -30,6 +44,10 @@ export class InicioComponent implements AfterViewInit, OnDestroy {
 
   irAPedirTurno(): void {
     this.router.navigate(['/pedir-turno']);
+  }
+
+  irAPedirTurnoServicio(servicio: Servicio): void {
+    this.router.navigate(['/pedir-turno'], { queryParams: { servicioId: servicio.id } });
   }
 
   irAServicios(): void {
@@ -82,5 +100,10 @@ export class InicioComponent implements AfterViewInit, OnDestroy {
 
   volverArriba(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  imgSrc(val: string | undefined): string {
+    if (!val) return 'assets/img/images.jpg';
+    return val.startsWith('http') ? val : 'data:image/jpeg;base64,' + val;
   }
 }

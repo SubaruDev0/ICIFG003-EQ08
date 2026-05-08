@@ -26,6 +26,10 @@ export class TurnoService {
     return this.http.get<string[]>(`${this.url}/disponibles?servicioId=${servicioId}&fecha=${fecha}`);
   }
 
+  actualizarEstado(id: number, estado: 'CONFIRMADO' | 'CANCELADO' | 'COMPLETADO'): Observable<any> {
+    return this.http.patch(`${this.url}/${id}/estado?estado=${estado}`, {});
+  }
+
   update(id: number, turno: Turno): Observable<Turno> {
     return this.http.put<Turno>(`${this.url}/${id}`, turno);
   }

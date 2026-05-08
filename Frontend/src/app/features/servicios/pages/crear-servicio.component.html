@@ -9,8 +9,9 @@
     </div>
 
     <form (ngSubmit)="onSubmit()">
+
       <div class="campo">
-        <label for="nombre"><i class="fas fa-tag"></i> Nombre del servicio</label>
+        <label for="nombre"><i class="fas fa-tag"></i> Nombre del servicio *</label>
         <input
           type="text"
           id="nombre"
@@ -19,6 +20,22 @@
           placeholder="Ej: Ortodoncia, Implantes dentales..."
           required
           autocomplete="off">
+      </div>
+
+      <div class="campo">
+        <label><i class="fas fa-image"></i> Imagen del servicio</label>
+        <div class="imagen-upload">
+          <div class="imagen-preview" [class.tiene-imagen]="imagenPreview">
+            <img *ngIf="imagenPreview" [src]="imagenPreview" alt="Preview">
+            <i *ngIf="!imagenPreview" class="fas fa-tooth icono-placeholder"></i>
+          </div>
+          <label class="btn-subir">
+            <i class="fas fa-upload"></i>
+            {{ imagenPreview ? 'Cambiar imagen' : 'Subir imagen' }}
+            <input type="file" (change)="onImagenChange($event)" accept="image/*" hidden>
+          </label>
+          <small class="ayuda">Opcional. Si no subes imagen se mostrará un ícono por defecto.</small>
+        </div>
       </div>
 
       <div class="acciones">
@@ -30,6 +47,7 @@
           {{ guardando ? 'Guardando...' : 'Guardar Servicio' }}
         </button>
       </div>
+
     </form>
   </div>
 </main>

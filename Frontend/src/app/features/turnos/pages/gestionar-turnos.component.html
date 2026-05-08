@@ -1,0 +1,70 @@
+<app-header></app-header>
+
+<div class="page-header">
+  <h1><i class="fas fa-calendar-check"></i> Gestión de Turnos</h1>
+  <p>Administra las citas solicitadas por los pacientes</p>
+</div>
+
+<main class="gestionar-container">
+
+  <div class="filtros">
+    <button [class.activo]="filtroEstado === 'TODOS'"      (click)="filtroEstado = 'TODOS'">Todos</button>
+    <button [class.activo]="filtroEstado === 'PENDIENTE'"  (click)="filtroEstado = 'PENDIENTE'">⏳ Pendientes</button>
+    <button [class.activo]="filtroEstado === 'CONFIRMADO'" (click)="filtroEstado = 'CONFIRMADO'">✅ Confirmados</button>
+    <button [class.activo]="filtroEstado === 'CANCELADO'"  (click)="filtroEstado = 'CANCELADO'">❌ Cancelados</button>
+    <button [class.activo]="filtroEstado === 'COMPLETADO'" (click)="filtroEstado = 'COMPLETADO'">🏁 Completados</button>
+  </div>
+
+  <div *ngIf="cargando" class="estado-carga">
+    <i class="fas fa-spinner fa-spin fa-2x"></i>
+    <p>Cargando turnos...</p>
+  </div>
+
+  <div *ngIf="!cargando && turnosFiltrados.length === 0" class="estado-vacio">
+    <i class="fas fa-calendar-times"></i>
+    <p>No hay turnos en este estado.</p>
+  </div>
+
+  <div class="turnos-grid" *ngIf="!cargando && turnosFiltrados.length > 0">
+    <div class="turno-card estado-{{ $any(t).estado }}" *ngFor="let t of $any(turnosFiltrados)">
+
+      <div class="turno-header">
+        <span [class]="'badge ' + badgeClase(t.estado)">{{ t.estado }}</span>
+        <span class="turno-fecha">
+          <span><i class="fas fa-calendar-alt"></i> {{ formatFecha(t.fecha) }}</span>
+          <span><i class="fas fa-clock"></i> {{ t.horario }}</span>
+        </span>
+      </div>
+
+      <div class="turno-body">
+        <p><strong><i class="fas fa-user"></i> Paciente</strong><br>{{ t.paciente?.nombreCompleto ?? 'Sin nombre' }}</p>
+        <p><strong><i class="fas fa-id-card"></i> RUT</strong><br>{{ t.paciente?.rut ?? '—' }}</p>
+        <p><strong><i class="fas fa-phone"></i> Teléfono</strong><br>{{ t.paciente?.telefono ?? '—' }}</p>
+        <p><strong><i class="fas fa-tooth"></i> Servicio</strong><br>{{ t.servicio?.nombre ?? '—' }}</p>
+        <p class="full" *ngIf="t.mensajeAdicional"><strong><i class="fas fa-comment-alt"></i> Mensaje:</strong> {{ t.mensajeAdicional }}</p>
+      </div>
+
+      <div class="turno-acciones" *ngIf="t.estado === 'PENDIENTE'">
+        <button class="btn-confirmar" (click)="confirmar(t)">
+          <i class="fas fa-check"></i> Confirmar cita
+        </button>
+        <button class="btn-rechazar" (click)="rechazar(t)">
+          <i class="fas fa-times"></i> Rechazar
+        </button>
+      </div>
+
+      <div class="turno-acciones" *ngIf="t.estado === 'CONFIRMADO'">
+        <button class="btn-completar" (click)="completar(t)">
+          <i class="fas fa-flag-checkered"></i> Marcar completado
+        </button>
+        <button class="btn-rechazar" (click)="rechazar(t)">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<app-footer></app-footer>

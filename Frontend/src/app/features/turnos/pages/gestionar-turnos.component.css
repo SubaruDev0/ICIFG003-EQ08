@@ -1,0 +1,130 @@
+/* ── Layout ────────────────────────────────────────── */
+.page-header {
+  background: linear-gradient(135deg, #0fa49c 0%, #0a7a74 100%);
+  color: #fff;
+  padding: 2.5rem 2rem 2rem;
+}
+.page-header h1 { margin: 0 0 0.25rem; font-size: 2rem; }
+.page-header p  { margin: 0; opacity: 0.85; font-size: 1rem; }
+
+.gestionar-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1.25rem;
+}
+
+/* ── Filtros ───────────────────────────────────────── */
+.filtros {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+.filtros button {
+  padding: 0.45rem 1.1rem;
+  border: 2px solid #0fa49c;
+  border-radius: 20px;
+  background: transparent;
+  color: #0fa49c;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: all 0.18s;
+}
+.filtros button.activo,
+.filtros button:hover {
+  background: #0fa49c;
+  color: #fff;
+}
+
+/* ── Cards ─────────────────────────────────────────── */
+.turnos-grid { display: grid; gap: 1rem; }
+
+.turno-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.07);
+  overflow: hidden;
+  border-left: 5px solid #ccc;
+  transition: box-shadow 0.2s;
+}
+.turno-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,.12); }
+
+/* colores laterales según estado */
+.turno-card.estado-PENDIENTE  { border-left-color: #f39c12; }
+.turno-card.estado-CONFIRMADO { border-left-color: #0fa49c; }
+.turno-card.estado-CANCELADO  { border-left-color: #e74c3c; }
+.turno-card.estado-COMPLETADO { border-left-color: #2ecc71; }
+
+/* ── Cabecera de card ──────────────────────────────── */
+.turno-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 1rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+.turno-fecha { font-size: 0.88rem; color: #666; display: flex; gap: 0.75rem; }
+
+/* ── Cuerpo ────────────────────────────────────────── */
+.turno-body {
+  padding: 1rem 1rem 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 1.5rem;
+}
+.turno-body p { margin: 0; font-size: 0.9rem; color: #444; }
+.turno-body p.full { grid-column: 1 / -1; }
+
+/* ── Acciones ──────────────────────────────────────── */
+.turno-acciones {
+  display: flex;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #eee;
+  background: #fafafa;
+}
+.turno-acciones button {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.turno-acciones button:hover  { opacity: 0.88; transform: translateY(-1px); }
+.turno-acciones button:active { transform: translateY(0); }
+
+.btn-confirmar { background: #0fa49c; color: #fff; }
+.btn-rechazar  { background: #e74c3c; color: #fff; }
+.btn-completar { background: #2ecc71; color: #fff; }
+
+/* ── Badges ────────────────────────────────────────── */
+.badge {
+  padding: 0.2rem 0.7rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.badge-pendiente  { background: #fff3cd; color: #856404; }
+.badge-confirmado { background: #d1f7f5; color: #0a6b65; }
+.badge-cancelado  { background: #fde8e8; color: #c0392b; }
+.badge-completado { background: #d4edda; color: #155724; }
+
+/* ── Estados vacíos ────────────────────────────────── */
+.estado-carga,
+.estado-vacio {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #aaa;
+}
+.estado-vacio i { font-size: 3.5rem; display: block; margin-bottom: 1rem; }

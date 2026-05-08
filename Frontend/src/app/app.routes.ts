@@ -7,6 +7,7 @@ import { CrearServicioComponent } from './features/servicios/pages/crear-servici
 import { EquipoComponent } from './features/profesionales/pages/equipo.component';
 import { ContactoComponent } from './features/contacto/pages/contacto.component';
 import { PedirTurnoComponent } from './features/turnos/pages/pedir-turno.component';
+import { GestionarTurnosComponent } from './features/turnos/pages/gestionar-turnos.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'equipo', component: EquipoComponent },
   { path: 'contacto', component: ContactoComponent },
   { path: 'pedir-turno', component: PedirTurnoComponent },
+  { path: 'gestionar-turnos', component: GestionarTurnosComponent },
   { path: '**', redirectTo: 'login' }
 ];

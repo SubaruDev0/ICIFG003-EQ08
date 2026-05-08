@@ -6,16 +6,6 @@
     <p>Complete el formulario para agendar su cita. Nos contactaremos para confirmar.</p>
   </div>
 
-  <!-- Mensaje de éxito -->
-  <div *ngIf="exito" class="alert-success">
-    <i class="fas fa-check-circle"></i> Turno solicitado correctamente. Nos contactaremos para confirmar.
-  </div>
-
-  <!-- Mensaje de error -->
-  <div *ngIf="errorEnvio" class="alert-error">
-    <i class="fas fa-exclamation-triangle"></i> {{ errorEnvio }}
-  </div>
-
   <section id="turnos" class="form-section">
     <div class="formulario">
       <form class="turno-form" (ngSubmit)="onSubmit()">
@@ -64,12 +54,18 @@
 
         <div class="form-group">
           <label for="horario">Horario Preferido *</label>
-          <select id="horario" [(ngModel)]="horario" name="horario" required>
-            <option value="" disabled selected>Seleccione un horario</option>
-            <option *ngFor="let h of horariosDisponibles" [value]="h">{{ h }}</option>
+          <select id="horario" [(ngModel)]="horario" name="horario" required
+                  [disabled]="!fecha || !servicioSeleccionado">
+            <option value="" disabled selected>Selecciona un horario</option>
+            <option *ngFor="let h of todosLosHorarios"
+                    [value]="h"
+                    [disabled]="!estaDisponible(h)"
+                    [style.color]="!estaDisponible(h) ? '#aaa' : 'inherit'">
+              {{ h }}{{ !estaDisponible(h) ? ' — Ocupado' : '' }}
+            </option>
           </select>
           <small *ngIf="fecha && servicioSeleccionado && horariosDisponibles.length === 0" class="help-text">
-            No hay horarios disponibles para esa fecha/servicio.
+            No hay horarios disponibles para esa fecha y servicio.
           </small>
         </div>
 

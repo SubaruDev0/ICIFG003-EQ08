@@ -7,7 +7,7 @@ import { FooterComponent } from '../../../shared/components/footer.component';
 import { ServicioService } from '../services/servicio.service';
 import { AuthService } from '../../../core/services/auth.service';
 import Swal from 'sweetalert2';
-import { animate, stagger } from 'animejs';
+import { animate } from 'animejs';
 
 @Component({
   selector: 'app-crear-servicio',
@@ -18,6 +18,8 @@ import { animate, stagger } from 'animejs';
 })
 export class CrearServicioComponent implements OnInit {
   nombre = '';
+  imagenBase64 = '';
+  imagenPreview = '';
   guardando = false;
 
   constructor(
@@ -27,7 +29,7 @@ export class CrearServicioComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (!this.authService.isAdmin()) {
+    if (!this.authService.isProfesionalOAdmin()) {
       this.router.navigate(['/inicio']);
       return;
     }
@@ -36,13 +38,26 @@ export class CrearServicioComponent implements OnInit {
     }, 50);
   }
 
+  onImagenChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      this.imagenPreview = result;
+      this.imagenBase64 = result.split(',')[1];
+    };
+    reader.readAsDataURL(file);
+  }
+
   onSubmit(): void {
     if (!this.nombre.trim()) {
       Swal.fire({ icon: 'warning', title: 'Campo requerido', text: 'Ingresa el nombre del servicio.', confirmButtonColor: '#0fa49c' });
       return;
     }
     this.guardando = true;
-    this.servicioService.save({ nombre: this.nombre.trim() }).subscribe({
+    this.servicioService.save({ nombre: this.nombre.trim(), imagenBase64: this.imagenBase64 || undefined }).subscribe({
       next: () => {
         this.guardando = false;
         Swal.fire({
@@ -58,12 +73,14 @@ export class CrearServicioComponent implements OnInit {
             this.router.navigate(['/servicios']);
           } else {
             this.nombre = '';
+            this.imagenBase64 = '';
+            this.imagenPreview = '';
           }
         });
       },
       error: () => {
         this.guardando = false;
-        Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo crear el servicio. Verifica que el servidor esté activo.', confirmButtonColor: '#0fa49c' });
+        Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo crear el servicio.', confirmButtonColor: '#0fa49c' });
       }
     });
   }

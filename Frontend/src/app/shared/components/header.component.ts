@@ -28,16 +28,24 @@ export class HeaderComponent implements OnInit {
 
   get isLoggedIn(): boolean { return !!this.currentUser; }
   get isAdmin(): boolean { return this.currentUser?.rol === 'ADMIN'; }
+  get isProfesionalOAdmin(): boolean {
+    const rol = this.currentUser?.rol;
+    return rol === 'ADMIN' || rol === 'PROFESIONAL';
+  }
 
   get avatarSrc(): string {
-    if (this.currentUser?.imagenBase64) {
-      return 'data:image/jpeg;base64,' + this.currentUser.imagenBase64;
-    }
-    return 'assets/img/logo.png';
+    const img = this.currentUser?.imagenBase64;
+    if (!img) return 'assets/img/logo.png';
+    return img.startsWith('http') ? img : 'data:image/jpeg;base64,' + img;
   }
 
   get rolLabel(): string {
-    return this.currentUser?.rol === 'ADMIN' ? 'Administrador' : 'Paciente';
+    const map: Record<string, string> = {
+      ADMIN: 'Administrador',
+      PROFESIONAL: 'Profesional',
+      PACIENTE: 'Paciente'
+    };
+    return map[this.currentUser?.rol ?? ''] ?? 'Usuario';
   }
 
   logout(): void {

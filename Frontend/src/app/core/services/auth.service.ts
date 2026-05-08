@@ -60,6 +60,11 @@ export class AuthService {
     return this.getCurrentUser()?.rol === 'ADMIN';
   }
 
+  isProfesionalOAdmin(): boolean {
+    const rol = this.getCurrentUser()?.rol;
+    return rol === 'ADMIN' || rol === 'PROFESIONAL';
+  }
+
   logout(): void {
     localStorage.removeItem(this.USER_KEY);
   }

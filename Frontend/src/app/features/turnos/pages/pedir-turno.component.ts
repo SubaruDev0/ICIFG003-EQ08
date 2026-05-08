@@ -8,6 +8,13 @@ import { ServicioService } from '../../servicios/services/servicio.service';
 import { PacienteService } from '../../pacientes/services/paciente.service';
 import { TurnoService } from '../services/turno.service';
 import { Servicio } from '../../servicios/models/servicio.model';
+import Swal from 'sweetalert2';
+
+const TODOS_LOS_HORARIOS: string[] = [];
+for (let h = 9; h <= 18; h++) {
+  TODOS_LOS_HORARIOS.push(`${String(h).padStart(2, '0')}:00`);
+  if (h < 18) TODOS_LOS_HORARIOS.push(`${String(h).padStart(2, '0')}:30`);
+}
 
 @Component({
   selector: 'app-pedir-turno',
@@ -25,14 +32,12 @@ export class PedirTurnoComponent implements OnInit {
   servicios: Servicio[] = [];
   fecha = '';
   horario = '';
+  todosLosHorarios = TODOS_LOS_HORARIOS;
   horariosDisponibles: string[] = [];
   mensaje = '';
   terminos = false;
   fechaMin = '';
-
   enviando = false;
-  exito = false;
-  errorEnvio = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -68,6 +73,10 @@ export class PedirTurnoComponent implements OnInit {
     this.cargarHorarios();
   }
 
+  estaDisponible(h: string): boolean {
+    return this.horariosDisponibles.includes(h);
+  }
+
   private cargarHorarios(): void {
     this.horariosDisponibles = [];
     if (!this.servicioSeleccionado?.id || !this.fecha) return;
@@ -89,25 +98,39 @@ export class PedirTurnoComponent implements OnInit {
     }
   }
 
+  private rutParaApi(): string {
+    return this.rut.replace(/\./g, '');
+  }
+
   onSubmit(): void {
-    if (!this.servicioSeleccionado) {
-      this.errorEnvio = 'Seleccione un servicio.';
+    if (!this.nombre.trim() || !this.rut.trim() || !this.telefono.trim() || !this.email.trim()) {
+      Swal.fire({ icon: 'warning', title: 'Campos incompletos', text: 'Por favor completa todos los campos obligatorios.', confirmButtonColor: '#0fa49c' });
       return;
     }
-
+    if (!this.servicioSeleccionado) {
+      Swal.fire({ icon: 'warning', title: 'Falta el servicio', text: 'Selecciona el servicio que necesitas.', confirmButtonColor: '#0fa49c' });
+      return;
+    }
+    if (!this.fecha) {
+      Swal.fire({ icon: 'warning', title: 'Falta la fecha', text: 'Selecciona una fecha para el turno.', confirmButtonColor: '#0fa49c' });
+      return;
+    }
+    if (!this.horario) {
+      Swal.fire({ icon: 'warning', title: 'Falta el horario', text: 'Selecciona un horario disponible.', confirmButtonColor: '#0fa49c' });
+      return;
+    }
     if (!this.terminos) {
-      this.errorEnvio = 'Debe aceptar los términos y condiciones.';
+      Swal.fire({ icon: 'warning', title: 'Términos y condiciones', text: 'Debes aceptar los términos para continuar.', confirmButtonColor: '#0fa49c' });
       return;
     }
 
     this.enviando = true;
-    this.errorEnvio = '';
 
     const paciente = {
-      nombreCompleto: this.nombre,
-      rut: this.rut,
-      telefono: this.telefono,
-      email: this.email
+      nombreCompleto: this.nombre.trim(),
+      rut: this.rutParaApi(),
+      telefono: this.telefono.trim(),
+      email: this.email.trim()
     };
 
     this.pacienteService.save(paciente).subscribe({
@@ -123,18 +146,25 @@ export class PedirTurnoComponent implements OnInit {
         this.turnoService.save(turno).subscribe({
           next: () => {
             this.enviando = false;
-            this.exito = true;
             this.resetForm();
+            Swal.fire({
+              icon: 'success',
+              title: '¡Turno solicitado!',
+              html: 'Tu turno fue registrado correctamente.<br>Te contactaremos para confirmar.',
+              confirmButtonColor: '#0fa49c',
+              timer: 3000,
+              showConfirmButton: false
+            });
           },
           error: () => {
             this.enviando = false;
-            this.errorEnvio = 'Error al registrar el turno. El horario podría no estar disponible.';
+            Swal.fire({ icon: 'error', title: 'Horario no disponible', text: 'Ese horario ya fue reservado. Por favor elige otro horario o fecha.', confirmButtonColor: '#0fa49c' });
           }
         });
       },
       error: () => {
         this.enviando = false;
-        this.errorEnvio = 'Error al registrar el paciente. Verifique los datos ingresados.';
+        Swal.fire({ icon: 'error', title: 'Error al guardar', text: 'No se pudo registrar el paciente. Verifica que el RUT y el email sean válidos.', confirmButtonColor: '#0fa49c' });
       }
     });
   }

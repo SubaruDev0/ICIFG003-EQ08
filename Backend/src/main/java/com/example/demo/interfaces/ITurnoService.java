@@ -15,6 +15,8 @@ public interface ITurnoService {
 
     List<String> obtenerHorariosDisponibles(Long servicioId, LocalDate fecha);
     
+    TurnoEntity actualizarEstado(Long id, com.example.demo.entity.enums.EstadoTurno estado);
+
     void deleteById(Long id);
-    
+
 }

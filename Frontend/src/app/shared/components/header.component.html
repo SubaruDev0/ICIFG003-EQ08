@@ -9,9 +9,14 @@
       <li><a routerLink="/servicios" routerLinkActive="active">Servicios</a></li>
       <li><a routerLink="/equipo" routerLinkActive="active">Equipo</a></li>
       <li><a routerLink="/contacto" routerLinkActive="active">Contacto</a></li>
-      <li *ngIf="isAdmin">
+      <li *ngIf="isProfesionalOAdmin">
         <a routerLink="/admin/servicios/nuevo" routerLinkActive="active" class="link-admin">
           <i class="fas fa-plus-circle"></i> Crear Servicio
+        </a>
+      </li>
+      <li *ngIf="isProfesionalOAdmin">
+        <a routerLink="/gestionar-turnos" routerLinkActive="active" class="link-admin">
+          <i class="fas fa-calendar-check"></i> Gestionar Turnos
         </a>
       </li>
       <li *ngIf="!isLoggedIn">

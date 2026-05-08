@@ -36,4 +36,9 @@ export class EquipoComponent implements OnInit {
   irAPedirTurno(): void {
     this.router.navigate(['/pedir-turno']);
   }
+
+  imgSrc(val: string | undefined): string {
+    if (!val) return 'assets/img/placeholder.jpg';
+    return val.startsWith('http') ? val : 'data:image/jpeg;base64,' + val;
+  }
 }

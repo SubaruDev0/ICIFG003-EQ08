@@ -46,7 +46,7 @@ public class TurnoService implements ITurnoService {
         }
 
         LocalDate fecha = Instant.ofEpochMilli(turno.getFecha().getTime())
-            .atZone(ZoneId.systemDefault())
+            .atZone(ZoneId.of("UTC"))
             .toLocalDate();
         List<String> disponibles = obtenerHorariosDisponibles(turno.getServicio().getId(), fecha);
         if (!disponibles.contains(turno.getHorario())) {
@@ -90,6 +90,14 @@ public class TurnoService implements ITurnoService {
         return bloquesBase.stream()
             .filter(h -> !ocupados.contains(h))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public com.example.demo.entity.TurnoEntity actualizarEstado(Long id, com.example.demo.entity.enums.EstadoTurno estado) {
+        TurnoEntity turno = turnoRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Turno no encontrado"));
+        turno.setEstado(estado);
+        return turnoRepository.save(turno);
     }
 
     @Override

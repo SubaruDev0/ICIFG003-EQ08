@@ -27,6 +27,16 @@ public class PacienteService implements IPacienteService {
 
     @Override
     public PacienteEntity save(PacienteEntity paciente) {
+        if (paciente.getRut() != null) {
+            java.util.Optional<PacienteEntity> existente = pacienteRepository.findByRut(paciente.getRut());
+            if (existente.isPresent()) {
+                PacienteEntity p = existente.get();
+                p.setNombreCompleto(paciente.getNombreCompleto());
+                p.setTelefono(paciente.getTelefono());
+                p.setEmail(paciente.getEmail());
+                return pacienteRepository.save(p);
+            }
+        }
         return pacienteRepository.save(paciente);
     }
 

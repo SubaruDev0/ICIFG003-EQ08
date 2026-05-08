@@ -22,9 +22,7 @@
 
   <section *ngIf="!cargando && !error && servicios.length > 0" class="servicios-grid">
     <div class="servicio-card" *ngFor="let servicio of servicios" style="opacity:0">
-      <div class="icono-servicio">
-        <i class="fas fa-tooth"></i>
-      </div>
+      <img [src]="imgSrc(servicio.imagenBase64)" [alt]="servicio.nombre">
       <h3>{{ servicio.nombre }}</h3>
       <button class="btn-info" (click)="irAPedirTurno(servicio)">Pedir Turno</button>
     </div>

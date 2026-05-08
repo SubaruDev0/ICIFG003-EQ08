@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@CrossOrigin(origins = "*") // Permite al frontend conectarse sin errores de CORS
 public class AuthController {
 
     private final UsuarioRepository usuarioRepository;
@@ -36,13 +35,16 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<UsuarioEntity> login(@RequestBody LoginRequest loginRequest) {
+        if (loginRequest == null || loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         // Busca al usuario en la base de datos
-        Optional<UsuarioEntity> usuarioOpt = usuarioRepository.findByUsername(loginRequest.getUsername());
+        Optional<UsuarioEntity> usuarioOpt = usuarioRepository.findByUsername(loginRequest.getUsername().trim());
 
         if (usuarioOpt.isPresent()) {
             UsuarioEntity usuario = usuarioOpt.get();
             // Compara la contraseña (actualmente en texto plano según la documentación)
-            if (usuario.getPassword().equals(loginRequest.getPassword())) {
+            if (usuario.getPassword() != null && usuario.getPassword().equals(loginRequest.getPassword())) {
                 return ResponseEntity.ok(usuario); // Retorna 200 OK con los datos
             }
         }

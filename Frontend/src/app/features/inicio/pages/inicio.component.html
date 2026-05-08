@@ -18,35 +18,11 @@
     <div class="carousel" #carousel
          (mouseenter)="onCarouselEnter()"
          (mouseleave)="onCarouselLeave()">
-      <div class="servicio">
-        <img src="assets/img/images.jpg" alt="Odontología General">
-        <h3>Odontología General</h3>
-        <p>Atención integral para el cuidado de tu salud bucal.</p>
-      </div>
-      <div class="servicio">
-        <img src="assets/img/Ortodoncia.jpg" alt="Ortodoncia">
-        <h3>Ortodoncia</h3>
-        <p>Alinea tus dientes y mejora tu sonrisa.</p>
-      </div>
-      <div class="servicio">
-        <img src="assets/img/Implantes.jpg" alt="Implantes Dentales">
-        <h3>Implantes Dentales</h3>
-        <p>Solución permanente para reemplazar dientes perdidos.</p>
-      </div>
-      <div class="servicio">
-        <img src="assets/img/Endodoncia.png" alt="Endodoncia">
-        <h3>Endodoncia</h3>
-        <p>Tratamiento de conductos para salvar tus piezas dentales.</p>
-      </div>
-      <div class="servicio">
-        <img src="assets/img/Periodoncia.jpg" alt="Periodoncia">
-        <h3>Periodoncia</h3>
-        <p>Cuidado y tratamiento especializado de encías.</p>
-      </div>
-      <div class="servicio">
-        <img src="assets/img/protesis.jpg" alt="Rehabilitación Oral">
-        <h3>Rehabilitación Oral</h3>
-        <p>Recupera la función y estética de tu sonrisa.</p>
+      <div class="servicio" *ngFor="let servicio of servicios">
+        <img [src]="imgSrc(servicio.imagenBase64)" [alt]="servicio.nombre">
+        <h3>{{ servicio.nombre }}</h3>
+        <p>Atención profesional en {{ servicio.nombre.toLowerCase() }}.</p>
+        <button class="btn-ver-mas" (click)="irAPedirTurnoServicio(servicio)">Pedir Turno</button>
       </div>
     </div>
     <button class="carousel-btn right-btn" (click)="scrollRight()">&#10095;</button>

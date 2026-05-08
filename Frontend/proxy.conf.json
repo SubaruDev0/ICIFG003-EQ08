@@ -1,7 +1,7 @@
 {
   "/api": {
-    "target": "https://icifg003-eq08-back.onrender.com",
-    "secure": true,
+    "target": "http://localhost:6789",
+    "secure": false,
     "changeOrigin": true,
     "logLevel": "info"
   }

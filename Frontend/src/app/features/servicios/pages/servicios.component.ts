@@ -43,6 +43,11 @@ export class ServiciosComponent implements OnInit {
   }
 
   get isAdmin(): boolean { return this.authService.isAdmin(); }
+
+  imgSrc(val: string | undefined): string {
+    if (!val) return 'assets/img/images.jpg';
+    return val.startsWith('http') ? val : 'data:image/jpeg;base64,' + val;
+  }
   irAPedirTurno(servicio?: Servicio): void {
     if (servicio) {
       this.router.navigate(['/pedir-turno'], { queryParams: { servicioId: servicio.id } });

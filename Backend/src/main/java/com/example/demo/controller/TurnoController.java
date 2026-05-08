@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.TurnoEntity;
+import com.example.demo.entity.enums.EstadoTurno;
 import com.example.demo.interfaces.ITurnoService;
 
 import java.time.LocalDate;
@@ -79,6 +80,18 @@ public class TurnoController {
             return ResponseEntity.ok(turnoService.save(existingTurno));
         } catch (Exception e) {
             return ResponseEntity.status(404).body(e);
+        }
+    }
+
+    @PatchMapping("/{id}/estado")
+    public ResponseEntity<?> actualizarEstado(@PathVariable Long id, @RequestParam String estado) {
+        try {
+            EstadoTurno nuevoEstado = EstadoTurno.valueOf(estado.toUpperCase());
+            return ResponseEntity.ok(turnoService.actualizarEstado(id, nuevoEstado));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 

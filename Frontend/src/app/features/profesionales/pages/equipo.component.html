@@ -22,9 +22,7 @@
     <div *ngIf="!cargando && profesionales.length > 0" class="equipo-grid">
       <div class="miembro-equipo" *ngFor="let prof of profesionales">
         <div class="foto-miembro">
-          <img
-            [src]="prof.imagenBase64 ? 'data:image/jpeg;base64,' + prof.imagenBase64 : 'assets/img/placeholder.jpg'"
-            [alt]="prof.nombreCompleto">
+          <img [src]="imgSrc(prof.imagenBase64)" [alt]="prof.nombreCompleto">
         </div>
         <div class="info-miembro">
           <h3>{{ prof.nombreCompleto }}</h3>
@@ -37,53 +35,8 @@
       </div>
     </div>
 
-    <!-- Fallback estático si el backend no tiene datos aún -->
-    <div *ngIf="!cargando && !errorCarga && profesionales.length === 0" class="equipo-grid">
-      <div class="miembro-equipo">
-        <div class="foto-miembro">
-          <img src="assets/img/carlos.jpg" alt="Dr. Carlos Mendoza">
-        </div>
-        <div class="info-miembro">
-          <h3>Dr. Carlos Mendoza</h3>
-          <p class="especialidad">Odontólogo General - Especialista en Implantología</p>
-          <p class="experiencia">15 años de experiencia</p>
-          <p class="descripcion">Especializado en implantes dentales y rehabilitación oral.</p>
-          <div class="redes-miembro">
-            <span class="icono"><i class="fas fa-envelope"></i></span>
-            <span class="icono"><i class="fas fa-phone"></i></span>
-          </div>
-        </div>
-      </div>
-      <div class="miembro-equipo">
-        <div class="foto-miembro">
-          <img src="assets/img/dr.Lopez.png" alt="Dra. Ana López">
-        </div>
-        <div class="info-miembro">
-          <h3>Dra. Ana López</h3>
-          <p class="especialidad">Ortodoncista</p>
-          <p class="experiencia">12 años de experiencia</p>
-          <p class="descripcion">Especialista en ortodoncia invisible y brackets estéticos.</p>
-          <div class="redes-miembro">
-            <span class="icono"><i class="fas fa-envelope"></i></span>
-            <span class="icono"><i class="fas fa-phone"></i></span>
-          </div>
-        </div>
-      </div>
-      <div class="miembro-equipo">
-        <div class="foto-miembro">
-          <img src="assets/img/dr.roberto.jpg" alt="Dr. Roberto Silva">
-        </div>
-        <div class="info-miembro">
-          <h3>Dr. Roberto Silva</h3>
-          <p class="especialidad">Cirujano Maxilofacial</p>
-          <p class="experiencia">18 años de experiencia</p>
-          <p class="descripcion">Especialista en cirugías complejas, extracciones y tratamientos de ATM.</p>
-          <div class="redes-miembro">
-            <span class="icono"><i class="fas fa-envelope"></i></span>
-            <span class="icono"><i class="fas fa-phone"></i></span>
-          </div>
-        </div>
-      </div>
+    <div *ngIf="!cargando && !errorCarga && profesionales.length === 0" class="loading-msg">
+      <p>No hay profesionales cargados todavía.</p>
     </div>
   </section>
 
