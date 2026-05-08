@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: back
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://ep-polished-band-acvrt1m0-pooler.sa-east-1.aws.neon.tech/neondb?user=neondb_owner&password=npg_9S2vxOtCweTu&sslmode=require&channelBinding=require}
+    username: ${DB_USERNAME:}
+    password: ${DB_PASSWORD:}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+server:
+  port: ${PORT:6789}
