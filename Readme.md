@@ -269,3 +269,64 @@ Si `mvn` no aparece en PATH, usar wrapper del proyecto:
 cd Backend
 .\mvnw.cmd -v
 ```
+
+### G) Despliegue completo (checklist rápida de evaluación)
+Orden recomendado:
+1. Instalar dependencias (sección F).
+2. Verificar herramientas (`java`, `mvn`, `node`, `npm`, `psql`).
+3. Crear base `clinica_dental`.
+4. Ejecutar backend.
+5. Poblar seed.
+6. Insertar especialidades faltantes (sección H).
+7. Ejecutar frontend.
+8. Probar login y creación de cuenta.
+
+Comandos (Windows PowerShell):
+```powershell
+cd ICIFG003-EQ08
+
+# Backend
+cd Backend
+.\mvnw.cmd clean install
+.\mvnw.cmd spring-boot:run
+```
+
+En otra terminal PowerShell:
+```powershell
+curl -X POST http://localhost:6789/api/v1/seed
+curl http://localhost:6789/api/v1/health
+```
+
+En otra terminal PowerShell:
+```powershell
+cd ICIFG003-EQ08\Frontend
+npm install
+npm run start -- --proxy-config proxy.conf.json
+```
+
+### H) Especialidades mínimas para permitir creación de cuentas
+Si en el registro de profesional no aparecen especialidades, insertar manualmente:
+
+```sql
+INSERT INTO servicio (nombre, imagen_base64) VALUES
+('Odontologia General', NULL),
+('Ortodoncia', NULL),
+('Implantes Dentales', NULL),
+('Endodoncia', NULL),
+('Blanqueamiento', NULL),
+('Periodoncia', NULL),
+('Odontopediatria', NULL),
+('Cirugia Maxilofacial', NULL);
+```
+
+Consulta de verificación:
+```sql
+SELECT id, nombre FROM servicio ORDER BY id;
+```
+
+Comando rápido para abrir `psql` (Windows):
+```powershell
+psql -h localhost -U postgres -d clinica_dental
+```
+
+Nota: si ya ejecutaste seed, los primeros 5 servicios ya deberían existir; en ese caso inserta solo los faltantes.
