@@ -169,3 +169,103 @@ curl "http://localhost:6789/api/v1/turnos/disponibles?servicioId=1&fecha=2026-05
 - Inicio: carrusel de servicios ahora sale desde la base (sin hardcode de servicios).
 - Equipo: especialistas cargados desde backend.
 - Formularios: piden solo datos necesarios para persistir en BD.
+
+## Modificaciones
+Estas notas complementan la guía original sin reemplazarla.
+
+### A) Orden recomendado para evaluación local (sin Docker)
+1. Clonar repositorio.
+2. Verificar herramientas:
+   ```bash
+   java -version
+   mvn -v
+   node -v
+   npm -v
+   ```
+3. Crear/verificar PostgreSQL local (`clinica_dental`).
+4. Levantar backend.
+5. Poblar seed (si corresponde).
+6. Levantar frontend.
+7. Ejecutar pruebas rápidas por API.
+
+### B) Clonado por HTTPS (alternativa a SSH)
+Si no tienes llave SSH configurada:
+```bash
+git clone https://github.com/SubaruDev0/ICIFG003-EQ08.git
+cd ICIFG003-EQ08
+```
+
+### C) Backend: validación de compilación y tests
+Además de `mvn spring-boot:run`, para validar build completo:
+```bash
+cd Backend
+mvn clean install
+```
+
+### D) Nota de consistencia
+- Este `Readme.md` raíz es la guía principal de ejecución.
+- `Frontend/README.md` corresponde al template base de Angular CLI.
+
+### E) Ejecución en Windows (VM) - PowerShell
+Validar herramientas:
+```powershell
+java -version
+mvn -v
+where.exe mvn
+node -v
+npm -v
+```
+
+Si `mvn` falla por PATH, usar Maven Wrapper del proyecto:
+```powershell
+cd Backend
+.\mvnw.cmd -v
+.\mvnw.cmd clean install
+.\mvnw.cmd spring-boot:run
+```
+
+Validar PostgreSQL local antes de iniciar backend:
+```powershell
+psql -h localhost -U postgres -d clinica_dental -c "\conninfo"
+```
+
+Si falta crear la base:
+```powershell
+createdb -h localhost -U postgres clinica_dental
+```
+
+Frontend en Windows:
+```powershell
+cd Frontend
+npm install
+npm run start -- --proxy-config proxy.conf.json
+```
+
+### F) Instalación rápida por terminal (Windows VM)
+Ejecutar PowerShell **como administrador** y correr:
+
+```powershell
+winget install --id Git.Git -e --source winget
+winget install --id EclipseAdoptium.Temurin.17.JDK -e --source winget
+winget install --id Apache.Maven -e --source winget
+winget install --id OpenJS.NodeJS.LTS -e --source winget
+winget install --id PostgreSQL.PostgreSQL -e --source winget
+```
+
+Luego cerrar y abrir PowerShell, y verificar:
+
+```powershell
+git --version
+java -version
+mvn -v
+node -v
+npm -v
+psql --version
+```
+
+Si `mvn` no aparece en PATH, usar wrapper del proyecto:
+
+```powershell
+cd Backend
+.\mvnw.cmd -v
+```
