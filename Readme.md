@@ -1,332 +1,161 @@
-# ICIFG003-EQ08 - Guía de Levantamiento Local
+# ICIFG003-EQ08 - Guía de Ejecución Local (Solo Windows)
 
-Link producción Frontend: https://icifg003-eq08.onrender.com  
-Link producción Backend: https://icifg003-eq08-back.onrender.com
+Esta guía está pensada para ejecutarse en una VM Windows del profesor.
 
-**Las variables de entorno están expuestas intencionalmente** para facilitar la revisión. (no hacer esto en casa xd)
+## 1. Requisitos en la VM
 
-## 1. Clonar el repositorio
-```bash
+Ya preinstalado en su contexto:
+- Java
+- Spring Tool Suite (STS)
+- Git
+- PostgreSQL (`psql`)
+
+Necesitas instalar:
+- Node.js (incluye npm)
+- Angular CLI (`ng`)
+
+## 2. Instalación en Windows
+
+Abrir PowerShell **como administrador** y ejecutar:
+
+```powershell
+winget install --id OpenJS.NodeJS.LTS -e --source winget
+```
+
+Luego instalar Angular CLI:
+
+```powershell
+npm install -g @angular/cli
+```
+
+Si PowerShell bloquea scripts/comandos, ejecutar una vez:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+Después cierra y vuelve a abrir PowerShell.
+
+## 3. Verificar herramientas
+
+```powershell
+java -version
+git --version
+psql --version
+node -v
+npm -v
+ng version
+```
+
+## 4. Clonar el proyecto
+
+Con SSH:
+
+```powershell
 git clone git@github.com:SubaruDev0/ICIFG003-EQ08.git
 cd ICIFG003-EQ08
 ```
 
-## 2. Levantar BACKEND en local
-Requisitos:
-- Java 17+
-- Maven 3.8+
+Con HTTPS (si no usas llave SSH):
 
-Comandos:
-```bash
-cd Backend
-mvn spring-boot:run
+```powershell
+git clone https://github.com/SubaruDev0/ICIFG003-EQ08.git
+cd ICIFG003-EQ08
 ```
 
-Backend local:
+## 5. Crear base de datos PostgreSQL
+
+La app usa por defecto:
+- DB: `demo01`
+- Usuario: `postgres`
+- Password: `1234`
+- Puerto DB: `5432`
+
+Entrar a PostgreSQL:
+
+```powershell
+psql -h localhost -U postgres -d postgres
+```
+
+Dentro de `psql`:
+
+```sql
+CREATE DATABASE demo01;
+\q
+```
+
+Verificar conexión:
+
+```powershell
+psql -h localhost -U postgres -d demo01 -c "\conninfo"
+```
+
+## 6. Ejecutar backend (Windows)
+
+Este proyecto usa Maven Wrapper, así que **no necesitas instalar Maven global**.
+
+```powershell
+cd Backend
+.\mvnw.cmd spring-boot:run
+```
+
+Backend disponible en:
 - `http://localhost:6789`
 
-Healthcheck:
-```bash
-curl http://localhost:6789/api/v1/health
+Health checks:
+
+```powershell
+curl http://localhost:6789/
+curl http://localhost:6789/health
 ```
 
-Si el puerto está ocupado:
-```bash
-mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=6790
-```
+## 7. Ejecutar frontend (Windows)
 
-## 3. Levantar FRONTEND en local
-Requisitos:
-- Node 18+
+En otra terminal PowerShell:
 
-Comandos:
-```bash
+```powershell
 cd Frontend
 npm install
 npm run start -- --proxy-config proxy.conf.json
 ```
 
-Frontend local:
+Frontend disponible en:
 - `http://localhost:4200`
 
-Nota corta y humana sobre `--proxy-config`: ese parámetro le dice a Angular que las rutas `/api` las mande al backend, así evitamos problemas de CORS en desarrollo.
+## 8. Hidratar base de datos (solo servicios)
 
-## 4. Crear y probar base de datos local (PostgreSQL + `psql`)
+Con backend corriendo:
 
-Requisitos:
-- PostgreSQL instalado localmente (incluye `psql`)
-
-Crear la base de datos local (si no existe):
-
-```bash
-createdb -U postgres clinica_dental
+```powershell
+curl -X POST http://localhost:6789/api/v1/servicios -H "Content-Type: application/json" -d "{\"nombre\":\"Odontologia General\",\"imagenBase64\":\"https://picsum.photos/seed/odontologia/600/400\"}"
+curl -X POST http://localhost:6789/api/v1/servicios -H "Content-Type: application/json" -d "{\"nombre\":\"Ortodoncia\",\"imagenBase64\":\"https://picsum.photos/seed/ortodoncia/600/400\"}"
+curl -X POST http://localhost:6789/api/v1/servicios -H "Content-Type: application/json" -d "{\"nombre\":\"Implantes Dentales\",\"imagenBase64\":\"https://picsum.photos/seed/implantes/600/400\"}"
+curl -X POST http://localhost:6789/api/v1/servicios -H "Content-Type: application/json" -d "{\"nombre\":\"Endodoncia\",\"imagenBase64\":\"https://picsum.photos/seed/endodoncia/600/400\"}"
+curl -X POST http://localhost:6789/api/v1/servicios -H "Content-Type: application/json" -d "{\"nombre\":\"Blanqueamiento Dental\",\"imagenBase64\":\"https://picsum.photos/seed/blanqueamiento/600/400\"}"
 ```
 
-Alternativa desde `psql`:
+Verificar servicios:
 
-```bash
-psql -U postgres -d postgres
-CREATE DATABASE clinica_dental;
-\q
+```powershell
+curl http://localhost:6789/api/v1/servicios
 ```
 
-Conectarte con `psql` a la base local (nombre: `clinica_dental`):
-```bash
-psql -U postgres -d clinica_dental
-```
+## 9. Hidratar base de datos (resto de datos)
 
-Ver tablas:
-```sql
-\dt
-```
-
-Ver datos:
-```sql
-SELECT id, username, rol FROM usuario ORDER BY id;
-SELECT id, nombre FROM servicio ORDER BY id;
-SELECT id, nombre_completo, servicio_id FROM profesional ORDER BY id;
-SELECT id, nombre_completo, rut, usuario_id FROM paciente ORDER BY id;
-SELECT id, fecha, horario, paciente_id, servicio_id, estado FROM turno ORDER BY id;
-
--- Extras útiles
-SELECT COUNT(*) AS total_usuarios FROM usuario;
-SELECT COUNT(*) AS total_turnos FROM turno;
-```
-
-## 5. Poblar la base de datos (seed)
-
-El seed **no corre automáticamente** al iniciar el backend. Se ejecuta manualmente con un comando curl, una sola vez.
-
-Con el backend corriendo:
-```bash
-# Poblar todo desde cero
-curl -X POST http://localhost:6789/api/v1/seed
-
-# Resetear (borrar todo) y volver a poblar
+```powershell
 curl -X DELETE http://localhost:6789/api/v1/seed
 curl -X POST http://localhost:6789/api/v1/seed
 ```
 
-Si la base ya tiene datos, el POST avisa y no hace nada (hay que hacer DELETE primero).
+Importante:
+- `POST /api/v1/seed` requiere base vacía.
+- `POST /api/v1/seed` también crea servicios.
 
-Usuarios creados:
+## 10. Usuarios de prueba (seed)
+
 - `admin` / `admin123` / `ADMIN`
 - `dra.martinez` / `prof123` / `PROFESIONAL`
 - `dr.gomez` / `prof123` / `PROFESIONAL`
 - `dra.lopez` / `prof123` / `PROFESIONAL`
 - `paciente1` / `pac123` / `PACIENTE`
 - `paciente2` / `pac123` / `PACIENTE`
-
-Servicios creados:
-- Odontologia General
-- Ortodoncia
-- Implantes Dentales
-- Endodoncia
-- Blanqueamiento
-
-Profesionales creados (vinculados a su servicio):
-- Dra. Sofia Martinez -> Ortodoncia
-- Dr. Carlos Gomez -> Implantes Dentales
-- Dra. Ana Lopez -> Endodoncia
-- Admin Clinica -> Odontologia General
-
-Pacientes creados (vinculados a su usuario):
-- Juan Perez (RUT 12345678-9) -> usuario `paciente1`
-- Maria Garcia (RUT 98765432-1) -> usuario `paciente2`
-
-Turnos creados (5 turnos, confirmados y pendientes):
-- Juan Perez: Ortodoncia, Ortodoncia, Blanqueamiento
-- Maria Garcia: Odontologia General, Implantes Dentales
-
-## 6. Relaciones de datos (resumen)
-- `usuario` -> define identidad y rol (`PROFESIONAL` o `PACIENTE`).
-- `paciente` -> puede vincularse a `usuario` (`usuario_id`).
-- `servicio` -> catálogo de atenciones dentales.
-- `profesional` -> asociado a un `servicio` por `servicio_id`.
-- `turno` -> une `paciente` + `servicio` + `fecha` + `horario`.
-
-## 7. Pruebas rápidas por API
-Con backend local corriendo:
-
-```bash
-# Servicios
-curl http://localhost:6789/api/v1/servicios
-
-# Profesionales
-curl http://localhost:6789/api/v1/profesionales
-
-# Login (ojo: solo una barra invertida por línea)
-curl -X POST http://localhost:6789/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}'
-
-# Horarios disponibles
-curl "http://localhost:6789/api/v1/turnos/disponibles?servicioId=1&fecha=2026-05-10"
-```
-
-## 8. Qué quedó ajustado en frontend
-- Header: muestra foto, nombre y rol del usuario logueado.
-- Inicio: carrusel de servicios ahora sale desde la base (sin hardcode de servicios).
-- Equipo: especialistas cargados desde backend.
-- Formularios: piden solo datos necesarios para persistir en BD.
-
-## Modificaciones
-Estas notas complementan la guía original sin reemplazarla.
-
-### A) Orden recomendado para evaluación local (sin Docker)
-1. Clonar repositorio.
-2. Verificar herramientas:
-   ```bash
-   java -version
-   mvn -v
-   node -v
-   npm -v
-   ```
-3. Crear/verificar PostgreSQL local (`clinica_dental`).
-4. Levantar backend.
-5. Poblar seed (si corresponde).
-6. Levantar frontend.
-7. Ejecutar pruebas rápidas por API.
-
-### B) Clonado por HTTPS (alternativa a SSH)
-Si no tienes llave SSH configurada:
-```bash
-git clone https://github.com/SubaruDev0/ICIFG003-EQ08.git
-cd ICIFG003-EQ08
-```
-
-### C) Backend: validación de compilación y tests
-Además de `mvn spring-boot:run`, para validar build completo:
-```bash
-cd Backend
-mvn clean install
-```
-
-### D) Nota de consistencia
-- Este `Readme.md` raíz es la guía principal de ejecución.
-- `Frontend/README.md` corresponde al template base de Angular CLI.
-
-### E) Ejecución en Windows (VM) - PowerShell
-Validar herramientas:
-```powershell
-java -version
-mvn -v
-where.exe mvn
-node -v
-npm -v
-```
-
-Si `mvn` falla por PATH, usar Maven Wrapper del proyecto:
-```powershell
-cd Backend
-.\mvnw.cmd -v
-.\mvnw.cmd clean install
-.\mvnw.cmd spring-boot:run
-```
-
-Validar PostgreSQL local antes de iniciar backend:
-```powershell
-psql -h localhost -U postgres -d clinica_dental -c "\conninfo"
-```
-
-Si falta crear la base:
-```powershell
-createdb -h localhost -U postgres clinica_dental
-```
-
-Frontend en Windows:
-```powershell
-cd Frontend
-npm install
-npm run start -- --proxy-config proxy.conf.json
-```
-
-### F) Instalación rápida por terminal (Windows VM)
-Ejecutar PowerShell **como administrador** y correr:
-
-```powershell
-winget install --id Git.Git -e --source winget
-winget install --id EclipseAdoptium.Temurin.17.JDK -e --source winget
-winget install --id Apache.Maven -e --source winget
-winget install --id OpenJS.NodeJS.LTS -e --source winget
-winget install --id PostgreSQL.PostgreSQL -e --source winget
-```
-
-Luego cerrar y abrir PowerShell, y verificar:
-
-```powershell
-git --version
-java -version
-mvn -v
-node -v
-npm -v
-psql --version
-```
-
-Si `mvn` no aparece en PATH, usar wrapper del proyecto:
-
-```powershell
-cd Backend
-.\mvnw.cmd -v
-```
-
-### G) Despliegue completo (checklist rápida de evaluación)
-Orden recomendado:
-1. Instalar dependencias (sección F).
-2. Verificar herramientas (`java`, `mvn`, `node`, `npm`, `psql`).
-3. Crear base `clinica_dental`.
-4. Ejecutar backend.
-5. Poblar seed.
-6. Insertar especialidades faltantes (sección H).
-7. Ejecutar frontend.
-8. Probar login y creación de cuenta.
-
-Comandos (Windows PowerShell):
-```powershell
-cd ICIFG003-EQ08
-
-# Backend
-cd Backend
-.\mvnw.cmd clean install
-.\mvnw.cmd spring-boot:run
-```
-
-En otra terminal PowerShell:
-```powershell
-curl -X POST http://localhost:6789/api/v1/seed
-curl http://localhost:6789/api/v1/health
-```
-
-En otra terminal PowerShell:
-```powershell
-cd ICIFG003-EQ08\Frontend
-npm install
-npm run start -- --proxy-config proxy.conf.json
-```
-
-### H) Especialidades mínimas para permitir creación de cuentas
-Si en el registro de profesional no aparecen especialidades, insertar manualmente:
-
-```sql
-INSERT INTO servicio (nombre, imagen_base64) VALUES
-('Odontologia General', NULL),
-('Ortodoncia', NULL),
-('Implantes Dentales', NULL),
-('Endodoncia', NULL),
-('Blanqueamiento', NULL),
-('Periodoncia', NULL),
-('Odontopediatria', NULL),
-('Cirugia Maxilofacial', NULL);
-```
-
-Consulta de verificación:
-```sql
-SELECT id, nombre FROM servicio ORDER BY id;
-```
-
-Comando rápido para abrir `psql` (Windows):
-```powershell
-psql -h localhost -U postgres -d clinica_dental
-```
-
-Nota: si ya ejecutaste seed, los primeros 5 servicios ya deberían existir; en ese caso inserta solo los faltantes.
